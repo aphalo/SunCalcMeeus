@@ -1,0 +1,37 @@
+Package: photobiologySunCalc
+Type: Package
+Title: Sun and Atmosphere Calculations
+Version: 0.1.0
+Date: 2024-08-04
+Authors@R:
+   c(
+    person("Pedro J.", "Aphalo", email = "pedro.aphalo@helsinki.fi", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-3385-972X"))
+    )
+Description: Compute the position of the sun, day and night length, local solar 
+  time using Meeus' very accurate formulae. Estimate air mass (AM) from solar 
+  elevation, reference evapotranspiration, and interconvert air water content 
+  expressed as different physical quantities.
+License: GPL (>= 2)
+Depends:
+    R (>= 4.0.0)
+Imports:
+    stats,
+    tibble (>= 3.1.6),
+    lubridate (>= 1.9.0),
+    dplyr (>= 1.0.9)
+Suggests:
+    knitr (>= 1.41),
+    rmarkdown (>= 2.18),
+    testthat (>= 3.1.4),
+    roxygen2 (>= 7.2.0),
+    lutz (>= 0.3.1),
+    covr
+LazyLoad: yes
+LazyData: yes
+ByteCompile: true
+URL: https://docs.r4photobiology.info/xx/,
+    https://github.com/aphalo/xx
+BugReports: https://github.com/aphalo/xx/issues
+Encoding: UTF-8
+RoxygenNote: 7.3.2
+VignetteBuilder: knitr

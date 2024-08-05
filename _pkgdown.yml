@@ -1,0 +1,73 @@
+destination: ../docs/photobiologySunCalc
+url: https://docs.r4photobiology.info/photobiologySunCalc/
+
+template:
+  bootstrap: 5
+
+reference:
+  - title: Package overview
+    contents:
+    - '`photobiologySunCalc-package`'
+
+  - title: Astronomy
+    desc: Astronomical computations of interest in photobiology and meteorology.
+    contents:
+    - solar_time
+    - as.solar_date
+    - is.solar_time
+    - is.solar_date
+    - as_tod
+    - format.tod_time
+    - print.tod_time
+    - tz_time_diff
+    - day_night
+    - sun_angles
+    - format.solar_time
+    - print.solar_time
+    - validate_geocode
+    - irrad_extraterrestrial
+
+  - title: Atmosphere
+    desc: Computations related to water vapour in air, and on equivalent air mass at different solar elevations.
+    contents:
+    - water_vp_sat
+    - relative_AM
+    - ET_ref
+    - net_irradiance
+
+  - title: Optics
+    desc: Computations related to radiation physics.
+    contents:
+    - diffraction_single_slit
+    - Rfr_from_n
+
+navbar:
+  structure:
+    left:  [intro, reference, articles, tutorials, news]
+    right: [search, github]
+  components:
+    intro:
+      icon: fas fa-home fa-lg
+      href: index.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    news:
+      text: Changelog
+      href: news/index.html
+    articles:
+      text: User Guide
+      menu:
+      - text: '0 The R for Photobiology Suite'
+        href: articles/userguide-0-r4p-introduction.html
+      - text: '1 Astronomy and Atmosphere'
+        href: articles/userguide-1-astronomy.html
+    tutorials:
+      text: Resources
+      menu:
+      - text: R for Photobiology web site
+        href: https://www.r4photobiology.info/
+      - text: A handbook of methods
+        href: https://doi.org/10.31885/9789521083631
+      - text: Photobiological Sciences Online
+        href: http://photobiology.info/

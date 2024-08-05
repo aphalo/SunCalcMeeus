@@ -1,0 +1,12 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.git/*
+^vignettes/*.html
+^vignettes/*.R
+^.*\.bak$
+^_pkgdown\.yml$
+^pkgdown/*
+^README\.Rmd$
+^.*\.sh$
+^\.github$
+^revdep

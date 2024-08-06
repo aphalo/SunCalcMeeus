@@ -28,9 +28,9 @@ Suggests:
     covr
 LazyLoad: yes
 ByteCompile: true
-URL: https://docs.r4photobiology.info/xx/,
-    https://github.com/aphalo/xx
-BugReports: https://github.com/aphalo/xx/issues
+URL: https://docs.r4photobiology.info/photobiologySunCalc/,
+    https://github.com/aphalo/photobiologySunCalc
+BugReports: https://github.com/aphalo/photobiologySunCalc/issues
 Encoding: UTF-8
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr

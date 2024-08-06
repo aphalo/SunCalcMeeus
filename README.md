@@ -16,14 +16,14 @@ badge](https://aphalo.r-universe.dev/badges/photobiologySunCalc)](https://aphalo
 Package ‘**photobiologySunCalc**’ implements Meeus’ accurate algorithms
 for the computation of the position of the sun, usable far into the past
 and future. It also implements the computation of local solar time,
-daylength, nightlength and times of sunset and sunrise, and arbitrary
-twilight elevation angles. It implements Kasten and Young’s (1998)
-approximation formula for optical air mass (AM). The Pennman-Monteith
-equation for the estimation of reference evapotranspiration is
-implemented for the different versions recommended by the Food and
-Agriculture Organization (FAO). Conversions between different physical
-quantities and units used to describe the water content of air are also
-available.
+daylength, nightlength and times of sunset and sunrise, based on both
+accepted and arbitrary sun elevation angles for twilight. It implements
+Kasten and Young’s (1998) approximation formula for optical air mass
+(AM). The Pennman-Monteith equation for the estimation of reference
+evapotranspiration is implemented for the different versions recommended
+by the Food and Agriculture Organization (FAO). Conversions between
+different physical quantities and units used to describe the water
+content of air are also provided.
 
 This package is part of a suite of R packages for photobiological
 calculations described at the

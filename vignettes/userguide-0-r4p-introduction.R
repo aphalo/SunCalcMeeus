@@ -1,3 +1,3 @@
 ## -----------------------------------------------------------------------------
-print(citation('photobiology'), style = "textVersion")
+print(citation(package = "photobiologySunCalc"), style = "textVersion")
 

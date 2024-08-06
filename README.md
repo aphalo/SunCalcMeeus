@@ -6,9 +6,11 @@
 [![CRAN
 version](https://www.r-pkg.org/badges/version-last-release/photobiologySunCalc)](https://cran.r-project.org/package=photobiologySunCalc)
 [![cran
-checks](https://badges.cranchecks.info/worst/photobiologySunCalc.svg)](https://cran.r-project.org/web/checks/check_results_photobiologySunCalc.html)
-[![R build
-status](https://github.com/aphalo/photobiologySunCalc/workflows/R-CMD-check/badge.svg)](https://github.com/aphalo/photobiologySunCalc/actions)
+checks](https://badges.cranchecks.info/worst/photobiologySunCalc.svg)](https://cran.r-project.org/web/checks/check_results_photobiologySunCalc.html)[![photobiologySunCalc
+status
+badge](https://aphalo.r-universe.dev/badges/photobiologySunCalc)](https://aphalo.r-universe.dev/photobiologySunCalc)
+[![R-CMD-check](https://github.com/aphalo/photobiologySunCalc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/aphalo/photobiologySunCalc/actions/workflows/R-CMD-check.yaml)
+[![Documentation](https://img.shields.io/badge/documentation-photobiologySunCalc-informational.svg)](https://docs.r4photobiology.info/photobiologySunCalc/)
 <!-- badges: end -->
 
 Package ‘**photobiologySunCalc**’ implements Meeus’ accurate algorithms
@@ -42,9 +44,9 @@ library(photobiologySunCalc)
 geocode <- data.frame(lon = 0, lat = 55)
 date <- lubridate::now(tzone = "UTC")
 sunrise_time(date, tz = "UTC", geocode = geocode)
-#> [1] "2024-08-05 04:17:21 UTC"
+#> [1] "2024-08-06 04:19:10 UTC"
 day_length(date, tz = "UTC", geocode = geocode)
-#> [1] 15.6206
+#> [1] 15.55599
 ```
 
 ## Installation

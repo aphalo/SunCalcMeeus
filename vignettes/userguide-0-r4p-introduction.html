@@ -356,7 +356,7 @@ Suite</h1>
 </div>
 
 <p>The citation for the suite is given by</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">citation</span>(<span class="st">&#39;photobiology&#39;</span>), <span class="at">style =</span> <span class="st">&quot;textVersion&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">citation</span>(<span class="at">package =</span> <span class="st">&quot;photobiologySunCalc&quot;</span>), <span class="at">style =</span> <span class="st">&quot;textVersion&quot;</span>)</span></code></pre></div>
 <pre><code>## Aphalo, Pedro J. (2015) The r4photobiology suite. UV4Plants Bulletin, 2015:1, 21-29. DOI:10.19232/uv4pb.2015.1.14</code></pre>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
@@ -439,57 +439,61 @@ Insight/Ocean Optics</em> spectrometers from within R.</p>
 <td>Core classes, methods and functions</td>
 </tr>
 <tr class="even">
+<td>‘photobiologySunCalc’</td>
+<td>Functions for position-of-the-sun and atmospheric calculations</td>
+</tr>
+<tr class="odd">
 <td>‘photobiologyWavebands’</td>
 <td>Definitions of standardized and frequently used wavelength band
 definitions and spectral weighting functions.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>‘photobiologyPlants’</td>
 <td>Methods, functions and data for plants and vegetation.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>‘photobiologyInOut’</td>
 <td>Exchange of data within R and using different proprietary and
 standard-based formats.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>‘photobiologyLamps’</td>
 <td>Spectral emission and other data for various lamp types.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>‘photobiologyLEDs’</td>
 <td>Spectral emission and other data for various LEDs and LED
 arrays.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>‘photobiologySensors’</td>
 <td>Spectral response and other data for various UV, VIS and NIR
 sensors.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>‘photobiologySun’</td>
 <td>Spectral irradiance and other data for sunlight. Both measured and
 standard definitions for ground level and top of the atmosphere.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>‘photobiologyFilters’</td>
 <td>Spectral transmittance and spectral reflectance data for different
 materials including optical filters. Spectral data on refractive
 index.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>‘ggspectra’</td>
 <td>Extensions to package ‘ggplot2’ for easier plotting of spectral
 data, including <code>autoplot()</code> and <code>ggplot()</code>
 methods for the classes defined in package ‘photobiology’ and scales,
 geoms and statistics.</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>‘oocquire’ (Not in CRAN)</td>
 <td>Data acquision and control of Ocean Optics (now Ocean Insight)
 spectrometers.</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>‘rOmniDriver’ (Not in CRAN)</td>
 <td>Interface to OmniDriver drivers for communication with spectrometers
 from Ocean Optics (now Ocean Insight)</td>

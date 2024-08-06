@@ -37,7 +37,7 @@
 #'   \code{ET_ref_day()}.
 #'
 #' @references
-#'   Allen R G, Pereira L S, Raes D, Smith M. 1998. Crop evapotranspiration:
+#'  Allen R G, Pereira L S, Raes D, Smith M. 1998. Crop evapotranspiration:
 #'     Guidelines for computing crop water requirements. Rome: FAO.
 #'  Allen R G, Pruitt W O, Wright J L, Howell T A, Ventura F, Snyder R,
 #'     Itenfisu D, Steduto P, Berengena J, Yrisarry J, et al. 2006. A

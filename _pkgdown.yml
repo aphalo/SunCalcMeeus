@@ -35,12 +35,6 @@ reference:
     - ET_ref
     - net_irradiance
 
-  - title: Optics
-    desc: Computations related to radiation physics.
-    contents:
-    - diffraction_single_slit
-    - Rfr_from_n
-
 navbar:
   structure:
     left:  [intro, reference, articles, tutorials, news]

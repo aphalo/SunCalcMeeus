@@ -27,7 +27,6 @@ Suggests:
     lutz (>= 0.3.1),
     covr
 LazyLoad: yes
-LazyData: yes
 ByteCompile: true
 URL: https://docs.r4photobiology.info/xx/,
     https://github.com/aphalo/xx

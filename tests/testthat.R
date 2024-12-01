@@ -1,4 +1,4 @@
 library(testthat)
-library(photobiologySunCalc)
+library(SunCalcMeeus)
 
-test_check("photobiologySunCalc")
+test_check("SunCalcMeeus")

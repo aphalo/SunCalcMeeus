@@ -2,9 +2,22 @@
 % Please edit documentation in R/relative-am.r
 \name{relative_AM}
 \alias{relative_AM}
+\alias{relative_AM_geotime}
 \title{Relative Air Mass (AM)}
 \usage{
-relative_AM(elevation.angle = NULL, zenith.angle = NULL, occluded.value = NA)
+relative_AM(
+  elevation.angle = NULL,
+  zenith.angle = NULL,
+  occluded.value = NA_real_
+)
+
+relative_AM_geotime(
+  time = lubridate::now(tzone = "UTC"),
+  tz = lubridate::tz(time),
+  geocode = tibble::tibble(lon = 0, lat = 51.5, address = "Greenwich"),
+  use.refraction = FALSE,
+  occluded.value = NA_real_
+)
 }
 \arguments{
 \item{elevation.angle, zenith.angle}{numeric vector Angle in degrees for the
@@ -13,15 +26,31 @@ sun position. An argument should be passed to one and only one of
 
 \item{occluded.value}{numeric Value to return when elevation angle is
 negative (sun below the horizon).}
+
+\item{time}{A "vector" of POSIXct Time, with any valid time zone (TZ) is
+allowed, default is current time.}
+
+\item{tz}{character string indicating time zone to be used in output.}
+
+\item{geocode}{data frame with variables lon and lat as numeric values
+(degrees), nrow > 1, allowed.}
+
+\item{use.refraction}{logical Flag indicating whether to correct for
+fraction in the atmosphere.}
 }
 \description{
-Approximate relative air mass (AM) from sun elevation or
-sun zenith angle.
+Approximate relative air mass (AM) from the sun's position (elevation or
+sun zenith angle) or from geographic and time coordinates.
 }
 \details{
-This is an implementation of equation (3) in Kasten and Young
-  (1989). This equation is only an approximation to the tabulated values in
-  the same paper. Returned values are rounded to three significant digits.
+Function \code{relative_AM()} implements equation (3) in Kasten and
+  Young (1989). This equation is only an approximation to the tabulated
+  values in the same paper. Returned values are rounded to three significant
+  digits.
+
+  Function \code{relative_AM_geotime()} is a wrapper on \code{relative_AM()}
+  that calls function \code{sun_elevation()} to obtain the position of the
+  sun from the geographic and time coordinates.
 }
 \note{
 Although relative air mass is not defined when the sun is not visible,
@@ -30,12 +59,19 @@ Although relative air mass is not defined when the sun is not visible,
 }
 \examples{
 
-relative_AM(c(90, 60, 30, 1, -10))
-relative_AM(c(90, 60, 30, 1, -10), occluded.value = Inf)
+relative_AM(elevation.angle = c(90, 60, 30, 1, -10))
+relative_AM(elevation.angle = c(90, 60, 30, 1, -10),
+            occluded.value = Inf)
 relative_AM(zenith.angle = 0)
+
+library(lubridate)
+relative_AM_geotime(ymd_hms("2014-09-23 12:00:00", tz = "UTC"),
+                    geocode = data.frame(lat=60, lon=0))
+relative_AM_geotime(ymd_hms("2014-09-23 12:00:00", tz = "UTC") + hours(0:12),
+                    geocode = data.frame(lat=30, lon=0))
 
 }
 \references{
 F. Kasten, A. T. Young (1989) Revised optical air mass tables and
-approximation formula. Applied Optics, 28, 4735-. doi:10.1364/ao.28.004735.
+approximation formula. Applied Optics, 28, 4735-. \doi{10.1364/ao.28.004735}.
 }

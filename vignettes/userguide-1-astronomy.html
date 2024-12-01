@@ -12,9 +12,9 @@
 
 <meta name="author" content="Pedro J. Aphalo" />
 
-<meta name="date" content="2024-08-04" />
+<meta name="date" content="2024-12-01" />
 
-<title>User Guide: 1 Astronomy and Atmosphere</title>
+<title>User Guide</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -62,7 +62,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -338,10 +338,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">User Guide: 1 Astronomy and Atmosphere</h1>
-<h3 class="subtitle">Package ‘photobiologySunCalc’ 0.1.0</h3>
+<h1 class="title toc-ignore">User Guide</h1>
+<h3 class="subtitle">Package ‘SunCalcMeeus’ 0.1.0</h3>
 <h4 class="author">Pedro J. Aphalo</h4>
-<h4 class="date">2024-08-04</h4>
+<h4 class="date">2024-12-01</h4>
 
 
 <div id="TOC">
@@ -359,25 +359,21 @@ noon and sunset</a></li>
 <li><a href="#time-of-day" id="toc-time-of-day">Time of day</a></li>
 <li><a href="#relative-air-mass" id="toc-relative-air-mass">Relative air
 mass</a></li>
-<li><a href="#water-vapour-related-calculations" id="toc-water-vapour-related-calculations">Water vapour-related
-calculations</a></li>
-<li><a href="#reference-evapotranspiration" id="toc-reference-evapotranspiration">Reference
-evapotranspiration</a></li>
 </ul>
 </div>
 
 <div id="radiation-astronomy-and-atmosphere" class="section level2">
 <h2>Radiation, astronomy and atmosphere</h2>
 <p>The functions described here used to be part of package
-‘photobiology’, but as of version 0.11.3 have been moved to this
+‘photobiology’, but as of version 0.11.4 have been moved to this
 package. To ensure backwards compatibility, package ‘photobiology’
-depends on ‘photobiologySunCalc’.</p>
+depends on ‘SunCalcMeeus’.</p>
 </div>
 <div id="getting-started" class="section level2">
 <h2>Getting started</h2>
 <p>We load two packages, our ‘<strong>photobiologySunCalc</strong>’ and
 ‘<strong>lubridate</strong>’, as they will be used in the examples.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(photobiologySunCalc)</span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(SunCalcMeeus)</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(lubridate)</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co"># if installed, we use &#39;lutz&#39; to lookup time zones from geocodes</span></span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>eval_lutz <span class="ot">&lt;-</span> <span class="fu">requireNamespace</span>(<span class="st">&quot;lutz&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span>
@@ -484,7 +480,7 @@ a useful default in some cases.</p>
 <pre><code>## # A tibble: 1 × 12
 ##   time                tz    solartime  longitude latitude address   azimuth
 ##   &lt;dttm&gt;              &lt;chr&gt; &lt;solar_tm&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;
-## 1 2024-08-05 14:06:36 UTC   14:00:39           0     51.5 Greenwich    226.
+## 1 2024-12-01 11:41:48 UTC   11:52:35           0     51.5 Greenwich    178.
 ## # ℹ 5 more variables: elevation &lt;dbl&gt;, declination &lt;dbl&gt;, eq.of.time &lt;dbl&gt;,
 ## #   hour.angle &lt;dbl&gt;, distance &lt;dbl&gt;</code></pre>
 <p>A vector of times is accepted as argument, and as performance is
@@ -580,11 +576,11 @@ to be preferred for past dates and the relationship between time zones
 and locations are affected by changes in country boundaries and in
 national laws.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">sunrise_time</span>(<span class="fu">now</span>(<span class="st">&quot;UTC&quot;</span>), <span class="at">geocode =</span> my.geocode)</span></code></pre></div>
-<pre><code>## [1] &quot;2024-08-05 02:11:19 UTC&quot;</code></pre>
+<pre><code>## [1] &quot;2024-12-01 06:57:44 UTC&quot;</code></pre>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">sunrise_time</span>(<span class="fu">now</span>(<span class="st">&quot;EET&quot;</span>), <span class="at">geocode =</span> my.geocode)</span></code></pre></div>
-<pre><code>## [1] &quot;2024-08-05 05:11:19 EEST&quot;</code></pre>
+<pre><code>## [1] &quot;2024-12-01 08:57:44 EET&quot;</code></pre>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">sunrise_time</span>(<span class="fu">now</span>(<span class="st">&quot;Europe/Helsinki&quot;</span>), <span class="at">geocode =</span> my.geocode)</span></code></pre></div>
-<pre><code>## [1] &quot;2024-08-05 05:11:19 EEST&quot;</code></pre>
+<pre><code>## [1] &quot;2024-12-01 08:57:44 EET&quot;</code></pre>
 <hr />
 <p>Be aware of the behaviour of functions <code>ymd()</code>,
 <code>dmy()</code>, <code>ym()</code> and <code>my()</code> from package
@@ -612,27 +608,27 @@ date at any location on Earth.</em></p>
 passed as argument to parameter <code>date</code>, but this can be
 overridden.</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">sunrise_time</span>(<span class="at">geocode =</span> my.geocode)</span></code></pre></div>
-<pre><code>## [1] &quot;2024-08-05 02:11:19 UTC&quot;</code></pre>
+<pre><code>## [1] &quot;2024-12-01 06:57:44 UTC&quot;</code></pre>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="fu">sunrise_time</span>(<span class="at">date =</span> <span class="fu">now</span>(<span class="st">&quot;UTC&quot;</span>), <span class="at">geocode =</span> my.geocode)</span></code></pre></div>
-<pre><code>## [1] &quot;2024-08-05 02:11:19 UTC&quot;</code></pre>
+<pre><code>## [1] &quot;2024-12-01 06:57:44 UTC&quot;</code></pre>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="fu">sunrise_time</span>(<span class="at">date =</span> <span class="fu">now</span>(<span class="st">&quot;UTC&quot;</span>), <span class="at">tz =</span> <span class="st">&quot;UTC&quot;</span>, <span class="at">geocode =</span> my.geocode)</span></code></pre></div>
-<pre><code>## [1] &quot;2024-08-05 02:11:19 UTC&quot;</code></pre>
+<pre><code>## [1] &quot;2024-12-01 06:57:44 UTC&quot;</code></pre>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="fu">sunrise_time</span>(<span class="at">date =</span> <span class="fu">now</span>(<span class="st">&quot;EET&quot;</span>), <span class="at">geocode =</span> my.geocode)</span></code></pre></div>
-<pre><code>## [1] &quot;2024-08-05 05:11:19 EEST&quot;</code></pre>
+<pre><code>## [1] &quot;2024-12-01 08:57:44 EET&quot;</code></pre>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">sunrise_time</span>(<span class="at">date =</span> <span class="fu">now</span>(<span class="st">&quot;EET&quot;</span>), <span class="at">tz =</span> <span class="st">&quot;EET&quot;</span>, <span class="at">geocode =</span> my.geocode)</span></code></pre></div>
-<pre><code>## [1] &quot;2024-08-05 05:11:19 EEST&quot;</code></pre>
+<pre><code>## [1] &quot;2024-12-01 08:57:44 EET&quot;</code></pre>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="fu">sunrise_time</span>(<span class="fu">today</span>(<span class="st">&quot;EET&quot;</span>), <span class="at">tz =</span> <span class="st">&quot;EET&quot;</span>, <span class="at">geocode =</span> my.geocode)</span></code></pre></div>
-<pre><code>## [1] &quot;2024-08-05 05:11:19 EEST&quot;</code></pre>
+<pre><code>## [1] &quot;2024-12-01 08:57:44 EET&quot;</code></pre>
 <hr />
 <p>We can also compute the time of solar noon and of sunset.</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="fu">noon_time</span>(<span class="fu">now</span>(<span class="st">&quot;UTC&quot;</span>), <span class="at">geocode =</span> my.geocode)</span></code></pre></div>
-<pre><code>## [1] &quot;2024-08-05 10:26:15 UTC&quot;</code></pre>
+<pre><code>## [1] &quot;2024-12-01 10:09:29 UTC&quot;</code></pre>
 <div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a><span class="fu">noon_time</span>(<span class="fu">now</span>(<span class="st">&quot;EET&quot;</span>), <span class="at">geocode =</span> my.geocode)</span></code></pre></div>
-<pre><code>## [1] &quot;2024-08-05 13:26:15 EEST&quot;</code></pre>
+<pre><code>## [1] &quot;2024-12-01 12:09:29 EET&quot;</code></pre>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="fu">sunset_time</span>(<span class="fu">now</span>(<span class="st">&quot;UTC&quot;</span>), <span class="at">geocode =</span> my.geocode)</span></code></pre></div>
-<pre><code>## [1] &quot;2024-08-05 18:41:10 UTC&quot;</code></pre>
+<pre><code>## [1] &quot;2024-12-01 13:21:14 UTC&quot;</code></pre>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="fu">sunset_time</span>(<span class="fu">now</span>(<span class="st">&quot;EET&quot;</span>), <span class="at">geocode =</span> my.geocode)</span></code></pre></div>
-<pre><code>## [1] &quot;2024-08-05 21:41:10 EEST&quot;</code></pre>
+<pre><code>## [1] &quot;2024-12-01 15:21:14 EET&quot;</code></pre>
 <p>Functions <code>day_length()</code> and <code>night_length()</code>
 return the length of time, by default in hours and fraction.</p>
 <div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="fu">day_length</span>(dates, <span class="at">geocode =</span> my.geocode)</span></code></pre></div>
@@ -795,14 +791,14 @@ astronomical position of the sun, time of day is based on the time
 coordinates for a time zone.</p>
 <div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" tabindex="-1"></a>times <span class="ot">&lt;-</span> <span class="fu">now</span>(<span class="at">tzone =</span> <span class="st">&quot;UTC&quot;</span>) <span class="sc">+</span> <span class="fu">hours</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">6</span>)</span>
 <span id="cb94-2"><a href="#cb94-2" tabindex="-1"></a>times</span></code></pre></div>
-<pre><code>## [1] &quot;2024-08-05 14:06:38 UTC&quot; &quot;2024-08-05 15:06:38 UTC&quot;
-## [3] &quot;2024-08-05 16:06:38 UTC&quot; &quot;2024-08-05 17:06:38 UTC&quot;
-## [5] &quot;2024-08-05 18:06:38 UTC&quot; &quot;2024-08-05 19:06:38 UTC&quot;
-## [7] &quot;2024-08-05 20:06:38 UTC&quot;</code></pre>
+<pre><code>## [1] &quot;2024-12-01 11:41:50 UTC&quot; &quot;2024-12-01 12:41:50 UTC&quot;
+## [3] &quot;2024-12-01 13:41:50 UTC&quot; &quot;2024-12-01 14:41:50 UTC&quot;
+## [5] &quot;2024-12-01 15:41:50 UTC&quot; &quot;2024-12-01 16:41:50 UTC&quot;
+## [7] &quot;2024-12-01 17:41:50 UTC&quot;</code></pre>
 <div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" tabindex="-1"></a><span class="fu">as_tod</span>(times)</span></code></pre></div>
-<pre><code>## [1] 14.11063 15.11063 16.11063 17.11063 18.11063 19.11063 20.11063</code></pre>
+<pre><code>## [1] 11.69724 12.69724 13.69724 14.69724 15.69724 16.69724 17.69724</code></pre>
 <div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" tabindex="-1"></a><span class="fu">as_tod</span>(times, <span class="at">unit.out =</span> <span class="st">&quot;minutes&quot;</span>)</span></code></pre></div>
-<pre><code>## [1]  846.6378  906.6378  966.6378 1026.6378 1086.6378 1146.6378 1206.6378</code></pre>
+<pre><code>## [1]  701.8347  761.8347  821.8347  881.8347  941.8347 1001.8347 1061.8347</code></pre>
 </div>
 <div id="relative-air-mass" class="section level2">
 <h2>Relative air mass</h2>
@@ -816,131 +812,6 @@ This function is vectorised.</p>
 <pre><code>## [1] 1.83</code></pre>
 <div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" tabindex="-1"></a><span class="fu">relative_AM</span>(<span class="fu">c</span>(<span class="dv">80</span>, <span class="dv">60</span>, <span class="dv">40</span>, <span class="dv">20</span>))</span></code></pre></div>
 <pre><code>## [1] 1.01 1.15 1.55 2.90</code></pre>
-</div>
-<div id="water-vapour-related-calculations" class="section level2">
-<h2>Water vapour-related calculations</h2>
-<p>There are several different empirical equations in common use to
-estimate water vapour pressure in air over liquid water or ice. This
-package implements some of them as well as their inverses, which are
-useful to compute the dew point. Some ancillary functions help with unit
-conversion and computation of relative humidity.</p>
-<table>
-<colgroup>
-<col width="16%" />
-<col width="14%" />
-<col width="19%" />
-<col width="50%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">Function</th>
-<th align="left">parameters</th>
-<th align="left">returned value</th>
-<th align="left">methods implemented</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">water_vp_sat()</td>
-<td align="left">temperature, C</td>
-<td align="left">vapour pressure, Pa</td>
-<td align="left">Tetens, Magnus, Wexler, Goff-Gratch</td>
-</tr>
-<tr class="even">
-<td align="left">water_dp()</td>
-<td align="left">vapour pressure, Pa</td>
-<td align="left">temperature, C</td>
-<td align="left">Tetens, Magnus, Wexler</td>
-</tr>
-<tr class="odd">
-<td align="left">water_fp()</td>
-<td align="left">vapour pressure, Pa</td>
-<td align="left">temperature, C</td>
-<td align="left">Tetens, Magnus, Wexler</td>
-</tr>
-<tr class="even">
-<td align="left">water_vp2RH()</td>
-<td align="left">vapour pressure, Pa; temperature, C</td>
-<td align="left">relative humidity, %</td>
-<td align="left">Tetens, Magnus, Wexler, Goff-Gratch</td>
-</tr>
-<tr class="odd">
-<td align="left">water_RH2vp()</td>
-<td align="left">relative humidity, %; temperature, C</td>
-<td align="left">vapour pressure, Pa</td>
-<td align="left">Tetens, Magnus, Wexler, Goff-Gratch</td>
-</tr>
-<tr class="even">
-<td align="left">water_vp2mvc()</td>
-<td align="left">vapour pressure, Pa</td>
-<td align="left">mass/vol. concentration, g m<span class="math inline">\(^{-3}\)</span></td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">water_mvc2vp()</td>
-<td align="left">mass/vol. concentration, g m<span class="math inline">\(^{-3}\)</span></td>
-<td align="left">vapour pressure, Pa</td>
-<td align="left"></td>
-</tr>
-</tbody>
-</table>
-<p>Saturation vapour pressure in Pa at four air temperatures in C, over
-water, computed using Tetens equation (the default method).</p>
-<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" tabindex="-1"></a><span class="fu">water_vp_sat</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>))</span></code></pre></div>
-<pre><code>## [1]  610.780 1227.873 2338.023 4242.450</code></pre>
-<p>Saturation water vapour mass/volume concentration for air at 20 C,
-expressed in grammes per cubic meter.</p>
-<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" tabindex="-1"></a><span class="fu">water_vp2mvc</span>(<span class="fu">water_vp_sat</span>(<span class="dv">20</span>), <span class="dv">20</span>)</span></code></pre></div>
-<pre><code>## [1] 17.27438</code></pre>
-<p>Vapour pressure for 50% relative humidity in air at a temperature of
-20 C.</p>
-<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" tabindex="-1"></a><span class="fu">water_RH2vp</span>(<span class="dv">50</span>, <span class="dv">20</span>)</span></code></pre></div>
-<pre><code>## [1] 1169.011</code></pre>
-<p>And the inverse computation, RH from vapour pressure in Pa and air
-temperature in C.</p>
-<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" tabindex="-1"></a><span class="fu">water_vp2RH</span>(<span class="dv">500</span>, <span class="dv">40</span>)</span></code></pre></div>
-<pre><code>## [1] 6.780297</code></pre>
-<p>Dew point for air with a water vapour pressure of 3 kPa.</p>
-<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1" tabindex="-1"></a><span class="fu">water_dp</span>(<span class="dv">3000</span>)</span></code></pre></div>
-<pre><code>## [1] 24.09167</code></pre>
-</div>
-<div id="reference-evapotranspiration" class="section level2">
-<h2>Reference evapotranspiration</h2>
-<p>Evapotranspiration is a measure of the water flux between land and
-atmosphere expressed as millimeters of water per unit ground area and
-unit time. One millimeter of evapotranspiration or precipitation is
-equivalent to one litre per square meter. Evapotranspiration is composed
-of the evaporation from the soil surface and other wet surfaces plus
-transpiration from plants (water evaporated inside leaves and diffusing
-as vapour to the outside of leaves). The condensation of dew represents
-a negative component.</p>
-<p>When not measured, evapotranspiration can be estimated based on
-energy balance and resistances to mass and heat transport. The
-Penman-Monteith equation is widely used. One special idealized condition
-is used to compute reference evapotranspiration (similar to potential
-evapotranspiration but with a standardized formulation by FAO that is
-widely used in agriculture).</p>
-<p>As implemented the computation of the energy balance is done with
-function <code>net_irradiance()</code> and using the value returned by
-this function as one argument, reference evapotranspiration is computed
-with function <code>ET_ref()</code>.</p>
-<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" tabindex="-1"></a>r_net <span class="ot">&lt;-</span> <span class="fu">net_irradiance</span>(<span class="at">temperature =</span> <span class="dv">20</span>, <span class="co"># C</span></span>
-<span id="cb114-2"><a href="#cb114-2" tabindex="-1"></a>                        <span class="at">sw.down.irradiance =</span> <span class="dv">800</span>, <span class="co"># W / m2</span></span>
-<span id="cb114-3"><a href="#cb114-3" tabindex="-1"></a>                        <span class="at">water.vp =</span> <span class="dv">1500</span>) <span class="co"># Pa</span></span>
-<span id="cb114-4"><a href="#cb114-4" tabindex="-1"></a>r_net <span class="co"># W / m2</span></span></code></pre></div>
-<pre><code>## [1] 546.8251</code></pre>
-<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" tabindex="-1"></a><span class="fu">ET_ref</span>(<span class="at">temperature =</span> <span class="dv">20</span>, <span class="co"># C</span></span>
-<span id="cb116-2"><a href="#cb116-2" tabindex="-1"></a>       <span class="at">water.vp =</span> <span class="dv">1500</span>, <span class="co"># Pa</span></span>
-<span id="cb116-3"><a href="#cb116-3" tabindex="-1"></a>       <span class="at">wind.speed =</span> <span class="dv">4</span>, <span class="co"># m / s</span></span>
-<span id="cb116-4"><a href="#cb116-4" tabindex="-1"></a>       <span class="at">net.irradiance =</span> r_net</span>
-<span id="cb116-5"><a href="#cb116-5" tabindex="-1"></a>       )</span></code></pre></div>
-<pre><code>## [1] 0.9448297</code></pre>
-<p>This function returns an estimate of reference evapotranspiration
-expressed in mm / h. Can be used with hourly means for the inputs or
-more frequent observations. In all cases the result is expressed as an
-instantaneous water flux rate expressed per hour.</p>
-<p>Function <code>ET_ref_day()</code> should be used when the input data
-are daily meeans or less frequent.</p>
 </div>
 
 

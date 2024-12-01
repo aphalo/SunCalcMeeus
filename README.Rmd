@@ -23,6 +23,8 @@ knitr::opts_chunk$set(
   
 Package '**SunCalcMeeus**' implements Meeus' accurate algorithms for the computation of the position of the sun, usable far into the past and future. It also implements the computation of local solar time, day length, night length and times of sunset and sunrise, based on accepted and arbitrary sun elevation angles for twilight.
 
+The package also implements Kasten and Young’s (1998) approximation formula for optical air mass (AM) as a function of sun elevation.
+
 The same Meeus' algorithms are used  in the [NOAA Solar Calculator](https://gml.noaa.gov/grad/solcalc/) of the United States National Oceanic and Atmospheric Administration (NOAA), Global Monitoring Laboratory. The version of the algoritm implemented in 'SunCalcMeeus' is not the simplified one used in the [worksheets available from NOAA](https://gml.noaa.gov/grad/solcalc/calcdetails.html) but instead nearly identical to that used in the on line calculator and assumed to be accurate enough to be used for times between years 2000 BC to 3000 AC.
 
 The functions provided are vectorised, and the best performance is achieved when vectors of instants in time are passed as arguments, as the equation of time is in this case computed only once for each geographic location.

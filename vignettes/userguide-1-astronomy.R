@@ -6,7 +6,7 @@ knitr::opts_chunk$set(fig.width=8, fig.height=4)
 options(tibble.print_max = 6, tibble.print_min = 4)
 
 ## ----pkg-load, eval=TRUE, message = FALSE-------------------------------------
-library(photobiologySunCalc)
+library(SunCalcMeeus)
 library(lubridate)
 # if installed, we use 'lutz' to lookup time zones from geocodes
 eval_lutz <- requireNamespace("lutz", quietly = TRUE)
@@ -36,8 +36,8 @@ two.geocodes <- data.frame(lat = c(60.16, 65.02),
 sun_angles(time = my.times, geocode = two.geocodes)
 
 ## ----eval=FALSE---------------------------------------------------------------
-#  sun_angles(time = photobiology::getWhenMeasured(sun.spct),
-#             eocode = photobiology::getWhereMeasured(sun.spct))
+# sun_angles(time = photobiology::getWhenMeasured(sun.spct),
+#            eocode = photobiology::getWhereMeasured(sun.spct))
 
 ## -----------------------------------------------------------------------------
 sun_elevation(time = my.times, geocode = my.geocode)
@@ -157,32 +157,4 @@ relative_AM(33)
 
 ## -----------------------------------------------------------------------------
 relative_AM(c(80, 60, 40, 20))
-
-## -----------------------------------------------------------------------------
-water_vp_sat(c(0, 10, 20, 30))
-
-## -----------------------------------------------------------------------------
-water_vp2mvc(water_vp_sat(20), 20)
-
-## -----------------------------------------------------------------------------
-water_RH2vp(50, 20)
-
-## -----------------------------------------------------------------------------
-water_vp2RH(500, 40)
-
-## -----------------------------------------------------------------------------
-water_dp(3000)
-
-## -----------------------------------------------------------------------------
-r_net <- net_irradiance(temperature = 20, # C
-                        sw.down.irradiance = 800, # W / m2
-                        water.vp = 1500) # Pa
-r_net # W / m2
-
-## -----------------------------------------------------------------------------
-ET_ref(temperature = 20, # C
-       water.vp = 1500, # Pa
-       wind.speed = 4, # m / s
-       net.irradiance = r_net
-       )
 

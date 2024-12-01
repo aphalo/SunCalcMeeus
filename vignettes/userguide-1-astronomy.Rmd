@@ -1,13 +1,13 @@
 ---
-title: "User Guide: 1 Astronomy and Atmosphere"
-subtitle: "Package 'photobiologySunCalc' `r packageVersion('photobiologySunCalc')` "
+title: "User Guide"
+subtitle: "Package 'SunCalcMeeus' `r packageVersion('SunCalcMeeus')` "
 author: "Pedro J. Aphalo"
-date: "`r packageDate('photobiology')`"
+date: "`r packageDate('SunCalcMeeus')`"
 output: 
   rmarkdown::html_vignette:
     toc: yes
 vignette: >
-  %\VignetteIndexEntry{User Guide: 1 Astronomy and Atmosphere}
+  %\VignetteIndexEntry{User Guide}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -15,9 +15,9 @@ vignette: >
 ## Radiation, astronomy and atmosphere
 
 The functions described here used to be part of package 'photobiology',
-but as of version 0.11.3 have been moved to this package. To ensure
+but as of version 0.11.4 have been moved to this package. To ensure
 backwards compatibility, package 'photobiology' depends on 
-'photobiologySunCalc'.
+'SunCalcMeeus'.
 
 ```{r, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(fig.width=8, fig.height=4)
@@ -33,7 +33,7 @@ options(tibble.print_max = 6, tibble.print_min = 4)
 We load two packages, our '**photobiologySunCalc**' and '**lubridate**', as they will be used in the examples.
 
 ```{r, pkg-load, eval=TRUE, message = FALSE}
-library(photobiologySunCalc)
+library(SunCalcMeeus)
 library(lubridate)
 # if installed, we use 'lutz' to lookup time zones from geocodes
 eval_lutz <- requireNamespace("lutz", quietly = TRUE)
@@ -408,98 +408,4 @@ relative_AM(33)
 ```{r}
 relative_AM(c(80, 60, 40, 20))
 ```
-
-## Water vapour-related calculations
-
-There are several different empirical equations in common use to estimate water
-vapour pressure in air over liquid water or ice. This package implements some of
-them as well as their inverses, which are useful to compute the dew point. Some
-ancillary functions help with unit conversion and computation of relative
-humidity.
-
-| Function | parameters | returned value | methods implemented |
-|:--------|:-------|:----------|:---------------------------|
-| water_vp_sat() | temperature, C | vapour pressure, Pa | Tetens, Magnus, Wexler, Goff-Gratch |
-| water_dp() | vapour pressure, Pa | temperature, C | Tetens, Magnus, Wexler |
-| water_fp() | vapour pressure, Pa | temperature, C | Tetens, Magnus, Wexler |
-| water_vp2RH() | vapour pressure, Pa; temperature, C | relative humidity, % | Tetens, Magnus, Wexler, Goff-Gratch |
-| water_RH2vp() | relative humidity, %; temperature, C | vapour pressure, Pa | Tetens, Magnus, Wexler, Goff-Gratch |
-| water_vp2mvc() | vapour pressure, Pa | mass/vol. concentration, g m$^{-3}$ | |
-| water_mvc2vp() | mass/vol. concentration, g m$^{-3}$ | vapour pressure, Pa | |
-
-
-Saturation vapour pressure in Pa at four air temperatures in C, over water,
-computed using Tetens equation (the default method).
-
-```{r}
-water_vp_sat(c(0, 10, 20, 30))
-```
-
-Saturation water vapour mass/volume concentration for air at 20 C, expressed in
-grammes per cubic meter.
-
-```{r}
-water_vp2mvc(water_vp_sat(20), 20)
-```
-
-Vapour pressure for 50% relative humidity in air at a temperature of 20 C.
-
-```{r}
-water_RH2vp(50, 20)
-```
-
-And the inverse computation, RH from vapour pressure in Pa and air temperature
-in C.
-
-```{r}
-water_vp2RH(500, 40)
-```
-
-Dew point for air with a water vapour pressure of 3 kPa.
-
-```{r}
-water_dp(3000)
-```
-
-## Reference evapotranspiration
-
-Evapotranspiration is a measure of the water flux between land and atmosphere
-expressed as millimeters of water per unit ground area and unit time. One
-millimeter of evapotranspiration or precipitation is equivalent to one litre
-per square meter. Evapotranspiration is composed of the evaporation from the
-soil surface and other wet surfaces plus transpiration from plants (water 
-evaporated inside leaves and diffusing as vapour to the outside of leaves). The
-condensation of dew represents a negative component.
-
-When not measured, evapotranspiration can be estimated based on energy balance 
-and resistances to mass and heat transport. The Penman-Monteith equation is
-widely used. One special idealized condition is used to compute reference
-evapotranspiration (similar to potential evapotranspiration but with a 
-standardized formulation by FAO that is widely used in agriculture).
-
-As implemented the computation of the energy balance is done with function
-`net_irradiance()` and using the value returned by this function as one 
-argument, reference evapotranspiration is computed with function `ET_ref()`.
-
-```{r}
-r_net <- net_irradiance(temperature = 20, # C
-                        sw.down.irradiance = 800, # W / m2
-                        water.vp = 1500) # Pa
-r_net # W / m2
-```
-```{r}
-ET_ref(temperature = 20, # C
-       water.vp = 1500, # Pa
-       wind.speed = 4, # m / s
-       net.irradiance = r_net
-       )
-```
-This function returns an estimate of reference evapotranspiration expressed in
-mm / h. Can be used with hourly means for the inputs or more frequent
-observations. In all cases the result is expressed as an instantaneous water 
-flux rate expressed per hour.
-
-Function `ET_ref_day()` should be used when the input data are daily meeans or
-less frequent.
-
 

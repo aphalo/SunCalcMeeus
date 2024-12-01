@@ -61,7 +61,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -341,7 +341,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 Suite</h1>
 <h3 class="subtitle">Photobiology-related computations in R</h3>
 <h4 class="author">Pedro J. Aphalo</h4>
-<h4 class="date">Built: 2024-08-05</h4>
+<h4 class="date">Built: 2024-12-01</h4>
 
 
 <div id="TOC">
@@ -356,7 +356,7 @@ Suite</h1>
 </div>
 
 <p>The citation for the suite is given by</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">citation</span>(<span class="at">package =</span> <span class="st">&quot;photobiologySunCalc&quot;</span>), <span class="at">style =</span> <span class="st">&quot;textVersion&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">citation</span>(<span class="at">package =</span> <span class="st">&quot;SunCalcMeeus&quot;</span>), <span class="at">style =</span> <span class="st">&quot;textVersion&quot;</span>)</span></code></pre></div>
 <pre><code>## Aphalo, Pedro J. (2015) The r4photobiology suite. UV4Plants Bulletin, 2015:1, 21-29. DOI:10.19232/uv4pb.2015.1.14</code></pre>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
@@ -439,8 +439,8 @@ Insight/Ocean Optics</em> spectrometers from within R.</p>
 <td>Core classes, methods and functions</td>
 </tr>
 <tr class="even">
-<td>‘photobiologySunCalc’</td>
-<td>Functions for position-of-the-sun and atmospheric calculations</td>
+<td>‘SunCalcMeeus’</td>
+<td>Functions for position-of-the-sun and air mass calculations</td>
 </tr>
 <tr class="odd">
 <td>‘photobiologyWavebands’</td>

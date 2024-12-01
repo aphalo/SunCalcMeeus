@@ -1,4 +1,3 @@
-library("photobiologySunCalc")
 library("lubridate")
 
 context("sun_calc")

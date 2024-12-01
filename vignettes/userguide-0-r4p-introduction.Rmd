@@ -18,7 +18,7 @@ editor_options:
 The citation for the suite is given by
 
 ```{r}
-print(citation(package = "photobiologySunCalc"), style = "textVersion")
+print(citation(package = "SunCalcMeeus"), style = "textVersion")
 ```
 
 ## Introduction
@@ -101,7 +101,7 @@ implements facilities for plotting spectral data by extending package
 | Package                     | Provides                                                                                                                                                                                                |
 |------------------------------------|------------------------------------|
 | 'photobiology'              | Core classes, methods and functions                                                                                                                                                                     |
-| 'photobiologySunCalc'       | Functions for position-of-the-sun and atmospheric calculations             |
+| 'SunCalcMeeus'              | Functions for position-of-the-sun and air mass calculations             |
 | 'photobiologyWavebands'     | Definitions of standardized and frequently used wavelength band definitions and spectral weighting functions.                                                                                           |
 | 'photobiologyPlants'        | Methods, functions and data for plants and vegetation.                                                                                                                                                  |
 | 'photobiologyInOut'         | Exchange of data within R and using different proprietary and standard-based formats.                                                                                                                   |

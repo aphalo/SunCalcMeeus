@@ -18,6 +18,4 @@
 #' sun_angles(lubridate::now(tzone = "EET"), tz = "EET",
 #'            geocode = data.frame(lat = 60, lon = 25))
 #'
-#' water_vp_sat(23) # 23 C -> vapour pressure in Pa
-#'
 "_PACKAGE"

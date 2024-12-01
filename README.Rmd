@@ -13,30 +13,43 @@ knitr::opts_chunk$set(
 )
 ```
 
-# photobiologySunCalc <img src="man/figures/logo.png" align="right" width="120"/>
+# SunCalcMeeus <img src="man/figures/logo.png" align="right" width="120"/>
 
 <!-- badges: start -->
- [![CRAN version](https://www.r-pkg.org/badges/version-last-release/photobiologySunCalc)](https://cran.r-project.org/package=photobiologySunCalc) [![cran checks](https://badges.cranchecks.info/worst/photobiologySunCalc.svg)](https://cran.r-project.org/web/checks/check_results_photobiologySunCalc.html)[![photobiologySunCalc status badge](https://aphalo.r-universe.dev/badges/photobiologySunCalc)](https://aphalo.r-universe.dev/photobiologySunCalc)
- [![R-CMD-check](https://github.com/aphalo/photobiologySunCalc/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/aphalo/photobiologySunCalc/actions/workflows/R-CMD-check.yaml)
-[![Documentation](https://img.shields.io/badge/documentation-photobiologySunCalc-informational.svg)](https://docs.r4photobiology.info/photobiologySunCalc/)
+ [![CRAN version](https://www.r-pkg.org/badges/version-last-release/SunCalcMeeus)](https://cran.r-project.org/package=SunCalcMeeus) [![cran checks](https://badges.cranchecks.info/worst/SunCalcMeeus.svg)](https://cran.r-project.org/web/checks/check_results_SunCalcMeeus.html)[![SunCalcMeeus status badge](https://aphalo.r-universe.dev/badges/SunCalcMeeus)](https://aphalo.r-universe.dev/SunCalcMeeus)
+ [![R-CMD-check](https://github.com/aphalo/SunCalcMeeus/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/aphalo/SunCalcMeeus/actions/workflows/R-CMD-check.yaml)
+[![Documentation](https://img.shields.io/badge/documentation-SunCalcMeeus-informational.svg)](https://docs.r4photobiology.info/SunCalcMeeus/)
 <!-- badges: end -->
   
-Package '**photobiologySunCalc**' implements Meeus' accurate algorithms for the computation of the position of the sun, usable far into the past and future. It also implements the computation of local solar time, daylength, nightlength and times of sunset and sunrise, based on both accepted and arbitrary sun elevation angles for twilight. It implements Kasten and Young's (1998) approximation formula for optical air mass (AM). The Pennman-Monteith equation for the estimation of reference evapotranspiration is implemented for the different versions recommended by the Food and Agriculture Organization (FAO). Conversions between different physical quantities and units used to describe the water content of air are also provided.
+Package '**SunCalcMeeus**' implements Meeus' accurate algorithms for the computation of the position of the sun, usable far into the past and future. It also implements the computation of local solar time, day length, night length and times of sunset and sunrise, based on accepted and arbitrary sun elevation angles for twilight.
+
+The same Meeus' algorithms are used  in the [NOAA Solar Calculator](https://gml.noaa.gov/grad/solcalc/) of the United States National Oceanic and Atmospheric Administration (NOAA), Global Monitoring Laboratory. The version of the algoritm implemented in 'SunCalcMeeus' is not the simplified one used in the [worksheets available from NOAA](https://gml.noaa.gov/grad/solcalc/calcdetails.html) but instead nearly identical to that used in the on line calculator and assumed to be accurate enough to be used for times between years 2000 BC to 3000 AC.
+
+The functions provided are vectorised, and the best performance is achieved when vectors of instants in time are passed as arguments, as the equation of time is in this case computed only once for each geographic location.
+
+## History
 
 This package is part of a suite of R packages for photobiological calculations described at the [r4photobiology](https://www.r4photobiology.info) web site and in the vignette [The R for Photobiology Suite](https://docs.r4photobiology.info/photobiology/articles/userguide-0-r4p-introduction.html).
 
-This package is a "spin-off" from package 'photobiology'.
+The functions now in 'SunCalcMeeus' were previously in package 'photobiology'. As they are being used in other contexts they are now published in as a separate R package to facilitate both their use and maintenance.
 
 ## Examples
 
-The first examples show some simple astronomical calculations for the sun.
+Example of simple astronomical calculations for the sun.
 
 ```{r example2}
-library(photobiologySunCalc)
+library(SunCalcMeeus)
 
+# using times
 geocode <- data.frame(lon = 0, lat = 55)
-date <- lubridate::now(tzone = "UTC")
+time <- lubridate::now(tzone = "UTC")
+
 sunrise_time(date, tz = "UTC", geocode = geocode)
+
+```
+
+
+```{r example2}
 day_length(date, tz = "UTC", geocode = geocode)
 ```
 
@@ -45,13 +58,13 @@ day_length(date, tz = "UTC", geocode = geocode)
 Installation of the most recent stable version from CRAN:
 
 ```{r, eval=FALSE}
-install.packages("photobiologySunCalc")
+install.packages("SunCalcMeeus")
 ```
 
 Installation of the current unstable version from R-Universe CRAN-like repository:
 
 ```{r, eval=FALSE}
-install.packages('photobiologySunCalc', 
+install.packages('SunCalcMeeus', 
                  repos = c('https://aphalo.r-universe.dev', 
                            'https://cloud.r-project.org'))
 ```
@@ -60,12 +73,12 @@ Installation of the current unstable version from GitHub:
 
 ```{r, eval=FALSE}
 # install.packages("devtools")
-devtools::install_github("aphalo/photobiology")
+devtools::install_github("aphalo/SunCalcMeeus")
 ```
 
 ## Documentation
 
-HTML documentation is available at (<https://docs.r4photobiology.info/photobiologySunCalc/>), including three *User Guides*.
+HTML documentation is available at (<https://docs.r4photobiology.info/SunCalcMeeus/>), including three *User Guides*.
 
 News on updates to the different packages of the 'r4photobiology' suite are regularly posted at (<https://www.r4photobiology.info/>).
 
@@ -77,14 +90,14 @@ A handbook written before the suite was developed contains useful information on
 
 ## Contributing
 
-Pull requests, bug reports, and feature requests are welcome at (<https://github.com/aphalo/photobiologySunCalc>).
+Pull requests, bug reports, and feature requests are welcome at (<https://github.com/aphalo/SunCalcMeeus>).
 
 ## Citation
 
 If you use this package to produce scientific or commercial publications, please cite according to:
 
 ```{r}
-citation("photobiologySunCalc")
+citation("SunCalcMeeus")
 ```
 
 ## License

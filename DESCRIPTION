@@ -1,16 +1,15 @@
-Package: photobiologySunCalc
+Package: SunCalcMeeus
 Type: Package
-Title: Sun and Atmosphere Calculations
+Title: Sun Position and Daylight Calculations
 Version: 0.1.0
-Date: 2024-08-04
+Date: 2024-12-01
 Authors@R:
    c(
     person("Pedro J.", "Aphalo", email = "pedro.aphalo@helsinki.fi", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-3385-972X"))
     )
-Description: Compute the position of the sun, day and night length, local solar 
-  time using Meeus' very accurate formulae. Estimate air mass (AM) from solar 
-  elevation, reference evapotranspiration, and interconvert air water content 
-  expressed as different physical quantities.
+Description: Compute the position of the sun, and local solar time using Meeus'
+    very accurate formulae. Compute day and/or night length using different
+    twilight definitions or arbitrary sun elevation angles.
 License: GPL (>= 2)
 Depends:
     R (>= 4.0.0)

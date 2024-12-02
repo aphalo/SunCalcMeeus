@@ -1,7 +1,7 @@
 Package: SunCalcMeeus
 Type: Package
 Title: Sun Position and Daylight Calculations
-Version: 0.1.0.9000
+Version: 0.1.1
 Date: 2024-12-02
 Authors@R:
    c(
@@ -16,14 +16,14 @@ Depends:
 Imports:
     stats,
     tibble (>= 3.1.6),
-    lubridate (>= 1.9.0),
+    lubridate (>= 1.9.3),
     dplyr (>= 1.0.9)
 Suggests:
     knitr (>= 1.41),
     rmarkdown (>= 2.18),
-    testthat (>= 3.1.4),
-    roxygen2 (>= 7.2.0),
-    lutz (>= 0.3.1),
+    testthat (>= 3.2.1),
+    roxygen2 (>= 7.3.0),
+    lutz (>= 0.3.2),
     covr
 LazyLoad: yes
 ByteCompile: true

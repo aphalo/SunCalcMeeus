@@ -10,6 +10,8 @@ editor_options:
 on the true position of the sun.
 - Add `relative_AM_geotime()` and `relative_AMt_geotime()`as convenience 
 functions.
+- Increase test coverage to nearly 95% with new tests and fix some minor bugs.
+- Fix bug in `distance_to_sun()`, value returned was totally off-mark.
 
 # SunCalcMeeus 0.1.0
 

@@ -250,9 +250,9 @@ distance_to_sun <- function(time = lubridate::now(),
                             use.refraction = FALSE)
 {
   stopifnot(length(time) == 1 || nrow(geocode) == 1)
-  90 - sun_angles(time = time,
-                  tz = tz,
-                  geocode = geocode,
-                  use.refraction = use.refraction)[["distance"]]
+  sun_angles(time = time,
+             tz = tz,
+             geocode = geocode,
+             use.refraction = use.refraction)[["distance"]]
 }
 

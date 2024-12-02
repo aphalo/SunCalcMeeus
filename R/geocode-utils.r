@@ -34,7 +34,7 @@ validate_geocode <- function(geocode) {
   } else if (is.data.frame(geocode)) {
     geocode <- tibble::as_tibble(geocode, .name_repair = "minimal")
   } else {
-    stop("Bad geocode: ", format(geocode))
+    stop("Bad geocode: ", paste(format(geocode), collapse = ", ", sep = ""))
   }
   stopifnot(nrow(geocode) >= 1) # needs to be replace by generation of no output in all functions
   stopifnot(exists("lon", geocode), exists("lat", geocode))
@@ -70,6 +70,12 @@ is_valid_geocode <- function(geocode) {
       all(c("lon", "lat") %in% names(geocode)) &&
       all(c(is.numeric(geocode[["lon"]]), is.numeric(geocode[["lat"]]))) &&
       if ("address" %in% names(geocode)) is.character(geocode[["address"]]) else TRUE
+
+    # range test
+    is_valid <- is_valid &&
+      !any(stats::na.omit(geocode[["lon"]]) > 180 | stats::na.omit(geocode[["lon"]]) < -180)
+    is_valid <- is_valid &&
+      !any(stats::na.omit(geocode[["lat"]]) > 89.99 | stats::na.omit(geocode[["lat"]]) < -89.99)
 
     if (!is_valid && "address" %in% names(geocode) && is.factor(geocode[["address"]])) {
       warning("'address' is a factor instead of a character vector.")

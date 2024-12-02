@@ -16,8 +16,8 @@ vignette: >
 
 The functions described here used to be part of package 'photobiology',
 but as of version 0.11.4 have been moved to this package. To ensure
-backwards compatibility, package 'photobiology' depends on 
-'SunCalcMeeus'.
+backwards compatibility, package 'photobiology' will depend on 
+'SunCalcMeeus' once these functions are removed.
 
 ```{r, include=FALSE, echo=FALSE}
 knitr::opts_chunk$set(fig.width=8, fig.height=4)
@@ -30,7 +30,7 @@ options(tibble.print_max = 6, tibble.print_min = 4)
 
 ## Getting started
 
-We load two packages, our '**photobiologySunCalc**' and '**lubridate**', as they will be used in the examples.
+We load two packages, our '**SunCalcMeeus**' and '**lubridate**', as they will be used in the examples.
 
 ```{r, pkg-load, eval=TRUE, message = FALSE}
 library(SunCalcMeeus)
@@ -89,21 +89,6 @@ year.
 The function `sun_angles` returns location, civil time, local solar time, the
 azimuth in degrees eastwards, elevation in degrees above the horizon,
 declination, the equation of time and the hour angle. 
-
-----
-
-In versions up to 0.9.11 of package 'photobiology' in addition to parameter
-`geocode` most functions also had the redundant formal parameters `lon` and
-`lat` which were removed in version 0.9.12 released in October 2016.
-
-----
-
-In versions 0.9.16 and later the code has been optimized for performance with
-time vectors, making massive calculations such as the sun position for every
-minute of the year quite fast (couple of seconds). We keep, however, examples
-with rather short vectors.
-
-----
 
 For calculation of the position of the sun we need to supply geographic
 coordinates and a time instant. The time instant passed as argument should be a
@@ -169,14 +154,6 @@ two.geocodes <- data.frame(lat = c(60.16, 65.02),
 sun_angles(time = my.times, geocode = two.geocodes)
 ```
 
-When spectra contain suitable metadata, the position of the sun for the
-spectral irradiance data measurement can be easily obtained.
-
-```{r, eval=FALSE}
-sun_angles(time = photobiology::getWhenMeasured(sun.spct), 
-           eocode = photobiology::getWhereMeasured(sun.spct))
-```
-
 If what is needed is only one of the solar angles, functions returning vectors
 instead of data frames can be useful. (In their current implementation these
 functions _do not_ have improved performance compared to `sun_angles()`)
@@ -224,7 +201,7 @@ sunrise_time(now("Europe/Helsinki"), geocode = my.geocode)
 
 ----
 
-Be aware of the behaviour of functions `ymd()`, `dmy()`, `ym()` and `my()` from package 'lubridate'. A function call like `ymd("2015-03-01", tz = "UTC")` returns a `POSIXct` object while a call like `ymd("2015-03-01")` is equivalent to `ymd("2015-03-01", tz = NULL)` and returns a `Date` object. `Date` objects do not carry time zone information in the way `POSIXct` objects do, and consequently `Dates` do not uniquely match a period between two absolute instants in time, but rather between two instants in local time. Given these features, it is safer to use `POSIXct` objects as arguments to the functions from package 'photobiology'. Function `today()` always returns a `Date` while function `now()` always returns a `POSIXct`, independently of the argument passed to their `tzone` parameter. Consequently it is preferable to use `now()`, but if you do use `today()` make sure to path the same value as argument to parameter `tzone` of `today()` and to parameter `tz` of the functions from package 'photobiology'. _An instant in time and time zone strictly define a corresponding date at any location on Earth._
+Be aware of the behaviour of functions `ymd()`, `dmy()`, `ym()` and `my()` from package 'lubridate'. A function call like `ymd("2015-03-01", tz = "UTC")` returns a `POSIXct` object while a call like `ymd("2015-03-01")` is equivalent to `ymd("2015-03-01", tz = NULL)` and returns a `Date` object. `Date` objects do not carry time zone information in the way `POSIXct` objects do, and consequently `Dates` do not uniquely match a period between two absolute instants in time, but rather between two instants in local time. Given these features, it is safer to use `POSIXct` objects as arguments to the functions from package 'SunCalcMeeus'. Function `today()` always returns a `Date` while function `now()` always returns a `POSIXct`, independently of the argument passed to their `tzone` parameter. Consequently it is preferable to use `now()`, but if you do use `today()` make sure to path the same value as argument to parameter `tzone` of `today()` and to parameter `tz` of the functions from package 'SunCalcMeeus'. _An instant in time and time zone strictly define a corresponding date at any location on Earth._
 
 The default for time zone is that of the `POSIXct` value passed as argument to parameter `date`, but this can be overridden.
 
@@ -357,7 +334,7 @@ day_night(dates[1:3],
 ## Solar time
 
 In field research it is in many cases preferable to sample or measure, and
-present and plot data based on local solar time. A new class is defined in package 'photobiology', with a print method, a constructor, a conversion function and a class query function.
+present and plot data based on local solar time. A new class is defined in package 'SunCalcMeeus', with a print method, a constructor, a conversion function and a class query function.
 
 The constructor takes as arguments a `POSIXct` object describing and instant in time and a geocode describing the geographic coordinates. 
 

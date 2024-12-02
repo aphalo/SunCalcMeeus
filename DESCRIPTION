@@ -1,8 +1,8 @@
 Package: SunCalcMeeus
 Type: Package
 Title: Sun Position and Daylight Calculations
-Version: 0.1.0
-Date: 2024-12-01
+Version: 0.1.0.9000
+Date: 2024-12-02
 Authors@R:
    c(
     person("Pedro J.", "Aphalo", email = "pedro.aphalo@helsinki.fi", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-3385-972X"))
@@ -27,9 +27,9 @@ Suggests:
     covr
 LazyLoad: yes
 ByteCompile: true
-URL: https://docs.r4photobiology.info/photobiologySunCalc/,
-    https://github.com/aphalo/photobiologySunCalc
-BugReports: https://github.com/aphalo/photobiologySunCalc/issues
+URL: https://docs.r4photobiology.info/SunCalcMeeus/,
+    https://github.com/aphalo/SunCalcMeeus
+BugReports: https://github.com/aphalo/SunCalcMeeus/issues
 Encoding: UTF-8
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr

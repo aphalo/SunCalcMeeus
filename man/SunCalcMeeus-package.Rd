@@ -6,6 +6,8 @@
 \alias{SunCalcMeeus-package}
 \title{SunCalcMeeus: Sun Position and Daylight Calculations}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 Compute the position of the sun, and local solar time using Meeus' very accurate formulae. Compute day and/or night length using different twilight definitions or arbitrary sun elevation angles.
 }
 \details{

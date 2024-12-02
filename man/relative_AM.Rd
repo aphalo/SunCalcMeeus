@@ -39,7 +39,7 @@ allowed, default is current time.}
 fraction in the atmosphere.}
 }
 \description{
-Approximate relative air mass (AM) from the sun's position (elevation or
+Approximate relative air mass (AM) from the sun's position (sun elevation or
 sun zenith angle) or from geographic and time coordinates.
 }
 \details{

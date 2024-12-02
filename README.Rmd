@@ -21,38 +21,50 @@ knitr::opts_chunk$set(
 [![Documentation](https://img.shields.io/badge/documentation-SunCalcMeeus-informational.svg)](https://docs.r4photobiology.info/SunCalcMeeus/)
 <!-- badges: end -->
   
-Package '**SunCalcMeeus**' implements Meeus' accurate algorithms for the computation of the position of the sun, usable far into the past and future. It also implements the computation of local solar time, day length, night length and times of sunset and sunrise, based on accepted and arbitrary sun elevation angles for twilight.
+## Purpose
 
-The package also implements Kasten and Young’s (1998) approximation formula for optical air mass (AM) as a function of sun elevation.
+Package 'SunCalcMeeus' implements Meeus' accurate algorithms for the computation of the position of the sun, usable far into the past and future. It also implements the computation of local solar time, day length, night length and times of sunset and sunrise, based on accepted and arbitrary sun elevation angles for twilight. Atmospheric refraction makes the apparent sun elevation, as seen be an observer on Earth, slightly different to the true astronomical sun elevation. The apparent sun elevation differs from the true astronomical position because the solar light beam changes its direction when travelling through the atmosphere. At low sun elevations at high latitudes a rather small difference expressed as an elevation angle becomes important for the apparent sunrise and sunset times. The exact value is difficult to compute with high accuracy as it depends on the water content in the atmosphere. The correction applied here assumes a "normal" water vapour column. Thus even if estimates of the true sun angles based on Meeus' algorithm are reported to be accurate to 0.001 degrees, the estimates of the apparent sun elevation can be in error by as much as 1 degree.
 
-The same Meeus' algorithms are used  in the [NOAA Solar Calculator](https://gml.noaa.gov/grad/solcalc/) of the United States National Oceanic and Atmospheric Administration (NOAA), Global Monitoring Laboratory. The version of the algoritm implemented in 'SunCalcMeeus' is not the simplified one used in the [worksheets available from NOAA](https://gml.noaa.gov/grad/solcalc/calcdetails.html) but instead nearly identical to that used in the on line calculator and assumed to be accurate enough to be used for times between years 2000 BC to 3000 AC.
+The 'SunCalcMeeus' package also implements Kasten and Young’s (1989) approximation formula for optical air mass (AM) as a function of the apparent sun elevation and Young's (1994) follow-up approximate formula as a function of the true sun elevation. In the first case the correction for atmospheric refraction must be included in the computation of the apparent elevation angle, in the second case this correction is applied when computing AM.
 
-The functions provided are vectorised, and the best performance is achieved when vectors of instants in time are passed as arguments, as the equation of time is in this case computed only once for each geographic location.
+The same algorithms from Meeus' book are used  in the [NOAA Solar Calculator](https://gml.noaa.gov/grad/solcalc/) of the United States National Oceanic and Atmospheric Administration (NOAA), Global Monitoring Laboratory. The version of the algorithm implemented in 'SunCalcMeeus' is not the simplified one used in the [worksheets available from NOAA](https://gml.noaa.gov/grad/solcalc/calcdetails.html) but instead nearly identical to that used in the on line calculator and assumed to be accurate enough to be used confidently for times between years 1000 BC to 3000 AC and with decreased accuracy even outside this range.
+
+The functions provided are vectorised, and the best performance per computed value is achieved when long vectors of instants in time are passed as arguments, as the equation of time is in this case computed only once for each geographic location.
 
 ## History
 
-This package is part of a suite of R packages for photobiological calculations described at the [r4photobiology](https://www.r4photobiology.info) web site and in the vignette [The R for Photobiology Suite](https://docs.r4photobiology.info/photobiology/articles/userguide-0-r4p-introduction.html).
+This package is part of a suite of R packages for photobiological calculations described at the [r4photobiology](https://www.r4photobiology.info) web site and in the vignette [The R for Photobiology Suite](https://docs.r4photobiology.info/SunCalcMeeus/articles/userguide-0-r4p-introduction.html).
 
-The functions now in 'SunCalcMeeus' were previously in package 'photobiology'. As they are being used in other contexts they are now published in as a separate R package to facilitate both their use and maintenance.
+The functions now in 'SunCalcMeeus' were previously included in package 'photobiology'. As they are being used in other contexts, they are now published separately in this R package to facilitate their visibility, use and maintenance.
 
 ## Examples
 
 Example of simple astronomical calculations for the sun.
 
-```{r example2}
+```{r example1}
 library(SunCalcMeeus)
+library(lubridate)
 
 # using times
 geocode <- data.frame(lon = 0, lat = 55)
-time <- lubridate::now(tzone = "UTC")
+date <- lubridate::today(tzone = "UTC")
 
-sunrise_time(date, tz = "UTC", geocode = geocode)
+sunrise_time(date, geocode = geocode)
 
+dates <- ymd("2024-09-21") + months(0:11)
+sunrise_time(dates, geocode = geocode)
 ```
 
-
 ```{r example2}
-day_length(date, tz = "UTC", geocode = geocode)
+day_length(dates, geocode = geocode)
+```
+```{r example3}
+times <- ymd_hms("2024-09-21 12:00:00") + minutes(seq(from = 0, to = 60, by = 10))
+data.frame(time = times, elevation = sun_elevation(times, geocode = geocode))
+```
+
+```{r example4}
+sun_angles(times, geocode = geocode)
 ```
 
 ## Installation
@@ -60,7 +72,8 @@ day_length(date, tz = "UTC", geocode = geocode)
 Installation of the most recent stable version from CRAN:
 
 ```{r, eval=FALSE}
-install.packages("SunCalcMeeus")
+# not yet in CRAN!
+# install.packages("SunCalcMeeus")
 ```
 
 Installation of the current unstable version from R-Universe CRAN-like repository:
@@ -80,15 +93,13 @@ devtools::install_github("aphalo/SunCalcMeeus")
 
 ## Documentation
 
-HTML documentation is available at (<https://docs.r4photobiology.info/SunCalcMeeus/>), including three *User Guides*.
+HTML documentation is available at (<https://docs.r4photobiology.info/SunCalcMeeus/>), including an *User Guide*.
 
-News on updates to the different packages of the 'r4photobiology' suite are regularly posted at (<https://www.r4photobiology.info/>).
+News on updates to the different packages of the 'r4photobiology' suite are posted at (<https://www.r4photobiology.info/>).
 
 Two articles introduce the basic ideas behind the design of the suite and describe its use: Aphalo P. J. (2015) (<https://doi.org/10.19232/uv4pb.2015.1.14>) and Aphalo P. J. (2016) (<https://doi.org/10.19232/uv4pb.2016.1.15>).
 
 A book is under preparation, and the draft is currently available at (<https://leanpub.com/r4photobiology/>).
-
-A handbook written before the suite was developed contains useful information on the quantification and manipulation of ultraviolet and visible radiation: Aphalo, P. J., Albert, A., Björn, L. O., McLeod, A. R., Robson, T. M., & Rosenqvist, E. (Eds.) (2012) Beyond the Visible: A handbook of best practice in plant UV photobiology (1st ed., p. xxx + 174). Helsinki: University of Helsinki, Department of Biosciences, Division of Plant Biology. ISBN 978-952-10-8363-1 (PDF), 978-952-10-8362-4 (paperback). PDF file available from (<https://hdl.handle.net/10138/37558>).
 
 ## Contributing
 

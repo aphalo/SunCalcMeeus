@@ -1,5 +1,5 @@
 destination: ../docs/photobiologySunCalc
-url: https://docs.r4photobiology.info/photobiologySunCalc/
+url: https://docs.r4photobiology.info/SunCalcMeeus/
 
 template:
   bootstrap: 5
@@ -7,7 +7,7 @@ template:
 reference:
   - title: Package overview
     contents:
-    - '`photobiologySunCalc-package`'
+    - '`SunCalcMeeus-package`'
 
   - title: Astronomy
     desc: Astronomical computations of interest in photobiology and meteorology.
@@ -28,12 +28,9 @@ reference:
     - irrad_extraterrestrial
 
   - title: Atmosphere
-    desc: Computations related to water vapour in air, and on equivalent air mass at different solar elevations.
+    desc: Computation of equivalent air mass at different solar elevations.
     contents:
-    - water_vp_sat
     - relative_AM
-    - ET_ref
-    - net_irradiance
 
 navbar:
   structure:

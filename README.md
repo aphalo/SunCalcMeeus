@@ -41,6 +41,11 @@ correction for atmospheric refraction must be included in the
 computation of the apparent elevation angle, in the second case this
 correction is applied when computing AM.
 
+Class `tod_time` is defined and used to store time-of-day values based
+on time zones. Classes `solar_time` and `solar_date` are defined and
+used to store local solar times and dates, i.e., astronomical time
+coordinates.
+
 The same algorithms from Meeus’ book are used in the [NOAA Solar
 Calculator](https://gml.noaa.gov/grad/solcalc/) of the United States
 National Oceanic and Atmospheric Administration (NOAA), Global
@@ -66,9 +71,9 @@ vignette [The R for Photobiology
 Suite](https://docs.r4photobiology.info/SunCalcMeeus/articles/userguide-0-r4p-introduction.html).
 
 The functions now in ‘SunCalcMeeus’ were previously included in package
-‘photobiology’. As they are being used in other contexts, they are now
-published separately in this R package to facilitate their visibility,
-use and maintenance.
+‘photobiology’. As they are being used also in other contexts, they are
+now published separately in this R package to increase their visibility,
+and facilitate their use and maintenance.
 
 ## Examples
 

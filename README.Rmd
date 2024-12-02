@@ -27,6 +27,8 @@ Package 'SunCalcMeeus' implements Meeus' accurate algorithms for the computation
 
 The 'SunCalcMeeus' package also implements Kasten and Young’s (1989) approximation formula for optical air mass (AM) as a function of the apparent sun elevation and Young's (1994) follow-up approximate formula as a function of the true sun elevation. In the first case the correction for atmospheric refraction must be included in the computation of the apparent elevation angle, in the second case this correction is applied when computing AM.
 
+Class `tod_time` is defined and used to store time-of-day values based on time zones. Classes `solar_time` and `solar_date` are defined and used to store local solar times and dates, i.e., astronomical time coordinates.
+
 The same algorithms from Meeus' book are used  in the [NOAA Solar Calculator](https://gml.noaa.gov/grad/solcalc/) of the United States National Oceanic and Atmospheric Administration (NOAA), Global Monitoring Laboratory. The version of the algorithm implemented in 'SunCalcMeeus' is not the simplified one used in the [worksheets available from NOAA](https://gml.noaa.gov/grad/solcalc/calcdetails.html) but instead nearly identical to that used in the on line calculator and assumed to be accurate enough to be used confidently for times between years 1000 BC to 3000 AC and with decreased accuracy even outside this range.
 
 The functions provided are vectorised, and the best performance per computed value is achieved when long vectors of instants in time are passed as arguments, as the equation of time is in this case computed only once for each geographic location.
@@ -35,7 +37,7 @@ The functions provided are vectorised, and the best performance per computed val
 
 This package is part of a suite of R packages for photobiological calculations described at the [r4photobiology](https://www.r4photobiology.info) web site and in the vignette [The R for Photobiology Suite](https://docs.r4photobiology.info/SunCalcMeeus/articles/userguide-0-r4p-introduction.html).
 
-The functions now in 'SunCalcMeeus' were previously included in package 'photobiology'. As they are being used in other contexts, they are now published separately in this R package to facilitate their visibility, use and maintenance.
+The functions now in 'SunCalcMeeus' were previously included in package 'photobiology'. As they are being used also in other contexts, they are now published separately in this R package to increase their visibility, and facilitate their use and maintenance.
 
 ## Examples
 

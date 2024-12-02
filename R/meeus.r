@@ -2,11 +2,12 @@
 #'
 calendar_change <- lubridate::ymd_hms("1582-10-14 22:20:11 UTC") # Julian -> Gregorian
 
-# All functions defined in this file are "internal" and not exported
+# Several functions defined in this file are "internal" and not exported
 # They are organized as very small functions to allow reuse of the results of
 # partial calculations. All constants are contained in the code itself.
 # They are based in "NOAA Sunrise/Sunset and Solar Position Calculators"
 # available at http://www.esrl.noaa.gov/gmd/grad/solcalc/calcdetails.html
+
 #' Solar astronomy using Meeus' algorithm
 #'
 #' The exact julian day computation is adapted from ode::julianDay() and tested

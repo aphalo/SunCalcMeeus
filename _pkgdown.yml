@@ -1,4 +1,4 @@
-destination: ../docs/photobiologySunCalc
+destination: ../docs/SunCalcMeeus
 url: https://docs.r4photobiology.info/SunCalcMeeus/
 
 template:
@@ -10,27 +10,38 @@ reference:
     - '`SunCalcMeeus-package`'
 
   - title: Astronomy
-    desc: Astronomical computations of interest in photobiology and meteorology.
+    desc: Sun-related astronomical computations based on Meeus' algorithms.
+    contents:
+    - sun_angles
+    - day_night
+
+  - title: Local solar time
+    desc: Classes and their methods for astronomical local time.
     contents:
     - solar_time
     - as.solar_date
     - is.solar_time
     - is.solar_date
+    - format.solar_time
+    - print.solar_time
+
+  - title: Time of day
+    desc: Class and its methods for local time of day, i.e., times lacking the date component.
+    contents:
     - as_tod
     - format.tod_time
     - print.tod_time
-    - tz_time_diff
-    - day_night
-    - sun_angles
-    - format.solar_time
-    - print.solar_time
-    - validate_geocode
-    - irrad_extraterrestrial
 
   - title: Atmosphere
     desc: Computation of equivalent air mass at different solar elevations.
     contents:
     - relative_AM
+
+  - title: Utilities
+    desc: Various utilities for handling input and output for the functions and methods above.
+    contents:
+    - tz_time_diff
+    - validate_geocode
 
 navbar:
   structure:
@@ -61,7 +72,3 @@ navbar:
         href: https://www.r4photobiology.info/
       - text: A handbook of methods
         href: https://doi.org/10.31885/9789521083631
-      - text: Photobiological Sciences Online
-        href: http://photobiology.info/
-      - text: FOSS for Spectroscopy
-        href: https://bryanhanson.github.io/FOSS4Spectroscopy/

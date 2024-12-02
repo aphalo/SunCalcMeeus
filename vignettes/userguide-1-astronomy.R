@@ -35,10 +35,6 @@ two.geocodes <- data.frame(lat = c(60.16, 65.02),
                            address = c("Helsinki", "Oulu"))
 sun_angles(time = my.times, geocode = two.geocodes)
 
-## ----eval=FALSE---------------------------------------------------------------
-# sun_angles(time = photobiology::getWhenMeasured(sun.spct),
-#            eocode = photobiology::getWhereMeasured(sun.spct))
-
 ## -----------------------------------------------------------------------------
 sun_elevation(time = my.times, geocode = my.geocode)
 

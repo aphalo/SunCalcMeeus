@@ -16,17 +16,18 @@ if (eval_lutz) {library(lutz)}
 my.geocode <- data.frame(lat = 60.16, lon = 24.93, address = "Helsinki")
 
 ## -----------------------------------------------------------------------------
-sun_angles(time = ymd_hms("2017-06-20 08:00:00", tz = "EET"), geocode = my.geocode)
+sun_angles(time = ymd_hms("2017-06-20 08:00:00", tz = "Europe/Helsinki"), 
+           geocode = my.geocode)
 
 ## -----------------------------------------------------------------------------
 sun_angles()
 
 ## -----------------------------------------------------------------------------
-sun_angles(time = ymd_hms("2014-01-01 0:0:0", tz = "EET") + hours(c(0, 6, 12)), 
+sun_angles(time = ymd_hms("2014-01-01 0:0:0", tz = "Europe/Helsinki") + hours(c(0, 6, 12)), 
            geocode = my.geocode)
 
 ## -----------------------------------------------------------------------------
-my.times <- ymd_hms("2014-01-01 0:0:0", tz = "EET") + hours(c(0, 6, 12))
+my.times <- ymd_hms("2014-01-01 0:0:0", tz = "Europe/Helsinki") + hours(c(0, 6, 12))
 sun_angles(time = my.times, geocode = my.geocode)
 
 ## -----------------------------------------------------------------------------
@@ -45,29 +46,39 @@ sun_zenith_angle(time = my.times, geocode = my.geocode)
 sun_azimuth(time = my.times, geocode = my.geocode)
 
 ## -----------------------------------------------------------------------------
-dates <- ymd("2015-03-01", tz = "EET") + months(0:5)
+dates <- ymd("2015-03-01", tz = "Europe/Helsinki") + months(0:5)
 dates
 
 ## -----------------------------------------------------------------------------
-sunrise_time(now("UTC"), geocode = my.geocode)
-sunrise_time(now("EET"), geocode = my.geocode)
-sunrise_time(now("Europe/Helsinki"), geocode = my.geocode)
+# defaults to current UTC date and Greenwich, UK as location
+sunrise_time()
+sunrise_time(date = now(), tz = "Europe/Helsinki", geocode = my.geocode)
+sunrise_time(date = now(tzone = "Europe/Helsinki"), geocode = my.geocode)
+# time zone abbreviation not shown
+print(sunrise_time(date = now("Europe/Helsinki"), 
+                   geocode = my.geocode),
+      usetz = FALSE)
 
 ## -----------------------------------------------------------------------------
+## Using date times as POSIXct
 sunrise_time(geocode = my.geocode)
 sunrise_time(date = now("UTC"), geocode = my.geocode)
 sunrise_time(date = now("UTC"), tz = "UTC", geocode = my.geocode)
-sunrise_time(date = now("EET"), geocode = my.geocode)
-sunrise_time(date = now("EET"), tz = "EET", geocode = my.geocode)
-sunrise_time(today("EET"), tz = "EET", geocode = my.geocode)
+sunrise_time(date = now("Europe/Helsinki"), geocode = my.geocode)
+sunrise_time(date = now("Europe/Helsinki"), tz = "Europe/Helsinki", geocode = my.geocode)
+## Using Date
+# correct always as time zones match
+sunrise_time(today("Europe/Helsinki"), tz = "Europe/Helsinki", geocode = my.geocode)
+# sometimes will be correct and sometimes off by 1 d
+sunrise_time(today("Australia/Canberra"), tz = "Europe/Helsinki", geocode = my.geocode)
 
 ## -----------------------------------------------------------------------------
 noon_time(now("UTC"), geocode = my.geocode)
-noon_time(now("EET"), geocode = my.geocode)
+noon_time(now("Europe/Helsinki"), geocode = my.geocode)
 
 ## -----------------------------------------------------------------------------
 sunset_time(now("UTC"), geocode = my.geocode)
-sunset_time(now("EET"), geocode = my.geocode)
+sunset_time(now("Europe/Helsinki"), geocode = my.geocode)
 
 ## -----------------------------------------------------------------------------
 day_length(dates, geocode = my.geocode)
@@ -82,25 +93,25 @@ sunrise_time(dates, geocode = data.frame(lat = -60, lon = 25))
 noon_time(dates, geocode = data.frame(lat = -60, lon = 25))
 
 ## -----------------------------------------------------------------------------
-sunrise_time(ymd("2017-03-21", tz = "EET"), 
-             tz = "EET", 
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
              geocode = my.geocode,
              twilight = "civil")
-sunrise_time(ymd("2017-03-21", tz = "EET"), 
-             tz = "EET", 
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
              geocode = my.geocode,
              twilight = -10)
-sunrise_time(ymd("2017-03-21", tz = "EET"), 
-             tz = "EET", 
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
              geocode = my.geocode,
              twilight = +12)
 
 ## -----------------------------------------------------------------------------
-sunrise_time(ymd("2017-03-21", tz = "EET"), 
-             tz = "EET", 
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
              geocode = my.geocode)
-sunrise_time(ymd("2017-03-21", tz = "EET"), 
-             tz = "EET", 
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
              geocode = my.geocode,
              unit.out = "hours")
 
@@ -152,5 +163,18 @@ as_tod(times, unit.out = "minutes")
 relative_AM(33)
 
 ## -----------------------------------------------------------------------------
-relative_AM(c(80, 60, 40, 20))
+relative_AM(c(90, 60, 40, 20, 10, 5, 2, 1, 0.5))
+
+## -----------------------------------------------------------------------------
+relative_AMt(33)
+
+## -----------------------------------------------------------------------------
+relative_AMt(c(90, 60, 40, 20, 10, 5, 2, 1, 0.5))
+
+## -----------------------------------------------------------------------------
+january.times <- ymd_h("2020-01-01 12", tz = "Europe/Helsinki") + hours(-2:+2)
+relative_AM_geotime(january.times, my.geocode, tz = "Europe/Helsinki")
+
+## -----------------------------------------------------------------------------
+relative_AMt_geotime(january.times, my.geocode, tz = "Europe/Helsinki")
 

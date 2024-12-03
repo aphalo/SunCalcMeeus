@@ -79,7 +79,7 @@ individual vectors.
 }
 \details{
 This function is an implementation of Meeus equations as used in
-  NOAAs on-line web calculator, which are precise and valid for a very broad
+  NOAA's on-line web calculator, which are precise and valid for a very broad
   range of dates (years -1000 to 3000 at least). The apparent solar
   elevations near sunrise and sunset are affected by refraction in the
   atmosphere, which does in turn depend on weather conditions. The effect of

@@ -16,11 +16,11 @@ knitr::opts_chunk$set(
 # SunCalcMeeus <img src="man/figures/logo.png" align="right" width="120"/>
 
 <!-- badges: start -->
- [![CRAN version](https://www.r-pkg.org/badges/version-last-release/SunCalcMeeus)](https://cran.r-project.org/package=SunCalcMeeus) [![cran checks](https://badges.cranchecks.info/worst/SunCalcMeeus.svg)](https://cran.r-project.org/web/checks/check_results_SunCalcMeeus.html)[![SunCalcMeeus status badge](https://aphalo.r-universe.dev/badges/SunCalcMeeus)](https://aphalo.r-universe.dev/SunCalcMeeus)
- [![R-CMD-check](https://github.com/aphalo/SunCalcMeeus/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/aphalo/SunCalcMeeus/actions/workflows/R-CMD-check.yaml)
+[![CRAN version](https://www.r-pkg.org/badges/version-last-release/SunCalcMeeus)](https://cran.r-project.org/package=SunCalcMeeus) [![SunCalcMeeus status badge](https://aphalo.r-universe.dev/badges/SunCalcMeeus)](https://aphalo.r-universe.dev/SunCalcMeeus)
+[![R-CMD-check](https://github.com/aphalo/SunCalcMeeus/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/aphalo/SunCalcMeeus/actions/workflows/R-CMD-check.yaml)
 [![Documentation](https://img.shields.io/badge/documentation-SunCalcMeeus-informational.svg)](https://docs.r4photobiology.info/SunCalcMeeus/)
 <!-- badges: end -->
-  
+
 ## Purpose
 
 Package 'SunCalcMeeus' implements Meeus' accurate algorithms for the computation of the position of the sun, usable far into the past and future. It also implements the computation of local solar time, day length, night length and times of sunset and sunrise, based on accepted and arbitrary sun elevation angles for twilight. Atmospheric refraction makes the apparent sun elevation, as seen be an observer on Earth, slightly different to the true astronomical sun elevation. The apparent sun elevation differs from the true astronomical position because the solar light beam changes its direction when travelling through the atmosphere. At low sun elevations at high latitudes a rather small difference expressed as an elevation angle becomes important for the apparent sunrise and sunset times. The exact value is difficult to compute with high accuracy as it depends on the water content in the atmosphere. The correction applied here assumes a "normal" water vapour column. Thus even if estimates of the true sun angles based on Meeus' algorithm are reported to be accurate to 0.001 degrees, the estimates of the apparent sun elevation can be in error by as much as 1 degree.
@@ -31,7 +31,7 @@ Class `tod_time` is defined and used to store time-of-day values based on time z
 
 The same algorithms from Meeus' book are used  in the [NOAA Solar Calculator](https://gml.noaa.gov/grad/solcalc/) of the United States National Oceanic and Atmospheric Administration (NOAA), Global Monitoring Laboratory. The version of the algorithm implemented in 'SunCalcMeeus' is not the simplified one used in the [worksheets available from NOAA](https://gml.noaa.gov/grad/solcalc/calcdetails.html) but instead nearly identical to that used in the on line calculator and assumed to be accurate enough to be used confidently for times between years 1000 BC to 3000 AC and with decreased accuracy even outside this range.
 
-The functions provided are vectorised, and the best performance per computed value is achieved when long vectors of instants in time are passed as arguments, as the equation of time is in this case computed only once for each geographic location.
+The functions provided are vectorised, and the best performance per computed value is achieved when long vectors of instants in time are passed as arguments, as the equation of time is in this case generated only once for each geographic location.
 
 ## History
 

@@ -12,7 +12,7 @@
 #' @return A numeric vector of the same length as \code{x}. If
 #'   \code{unit.out = "tod_time"} an object of class \code{"tod_time"} which
 #'   the same as for \code{unit.out = "hours"} but with the class attribute
-#'   set, which dispatches to special \code{format()} nad \code{print()}
+#'   set, which dispatches to special \code{format()} and \code{print()}
 #'   methods.
 #'
 #' @seealso \code{\link{solar_time}}

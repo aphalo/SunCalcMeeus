@@ -5,9 +5,7 @@
 
 [![CRAN
 version](https://www.r-pkg.org/badges/version-last-release/SunCalcMeeus)](https://cran.r-project.org/package=SunCalcMeeus)
-[![cran
-checks](https://badges.cranchecks.info/worst/SunCalcMeeus.svg)](https://cran.r-project.org/web/checks/check_results_SunCalcMeeus.html)[![SunCalcMeeus
-status
+[![SunCalcMeeus status
 badge](https://aphalo.r-universe.dev/badges/SunCalcMeeus)](https://aphalo.r-universe.dev/SunCalcMeeus)
 [![R-CMD-check](https://github.com/aphalo/SunCalcMeeus/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/aphalo/SunCalcMeeus/actions/workflows/R-CMD-check.yaml)
 [![Documentation](https://img.shields.io/badge/documentation-SunCalcMeeus-informational.svg)](https://docs.r4photobiology.info/SunCalcMeeus/)

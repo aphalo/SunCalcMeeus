@@ -119,7 +119,8 @@ The position of the sun at Helsinki, at the given instant in time for
 time zone _Eastern European Time_.
 
 ```{r}
-sun_angles(time = ymd_hms("2017-06-20 08:00:00", tz = "EET"), geocode = my.geocode)
+sun_angles(time = ymd_hms("2017-06-20 08:00:00", tz = "Europe/Helsinki"), 
+           geocode = my.geocode)
 ```
 
 Functions have defaults for their arguments, but rarely Greenwich will be the
@@ -136,12 +137,12 @@ multiple calls to the function. The vector of times can be created on the fly,
 or stored beforehand.
 
 ```{r}
-sun_angles(time = ymd_hms("2014-01-01 0:0:0", tz = "EET") + hours(c(0, 6, 12)), 
+sun_angles(time = ymd_hms("2014-01-01 0:0:0", tz = "Europe/Helsinki") + hours(c(0, 6, 12)), 
            geocode = my.geocode)
 ```
 
 ```{r}
-my.times <- ymd_hms("2014-01-01 0:0:0", tz = "EET") + hours(c(0, 6, 12))
+my.times <- ymd_hms("2014-01-01 0:0:0", tz = "Europe/Helsinki") + hours(c(0, 6, 12))
 sun_angles(time = my.times, geocode = my.geocode)
 ```
 
@@ -177,41 +178,52 @@ Convenience functions `sunrise_time()`, `sunset_time()`, `noon_time()`, `day_len
 `day_night` returns a data frame containing all the quantities returned by the
 other functions. 
 
-These functions are vectorized for their `date` and `geocode`
-parameters. They use as default location Greenwich in the U.K., and default time zone "UTC". The date is given by default by the current date based on "UTC". Universal Time Coordinate ("UTC") is the reference used to describe differences among time zones and is never modified by daylight saving time or summer time. The difference between EET (Eastern European Time) and UTC is +2 hours in winter and with EEST (Eastern European Summer Time) +3 hours.
+These functions are vectorized for their `date` and `geocode` parameters. They use as default location Greenwich in the U.K., and default time zone "UTC". The date is given by default by the current date based on "UTC". Universal Time Coordinate ("UTC") is the reference used to describe differences among time zones and is never modified by daylight saving time or summer time. The difference between "Europe/Helsinki" (matching Eastern European Time) and UTC is +2 hours in winter and (matching Eastern European Summer Time) +3 hours in summer.
 
 Latitude and longitude are passed through a `geocode` (a data frame). If the returned value is desired in the local time coordinates of the argument passed to `geocode`, the time zone should match the geographic coordinates. If geocodes contain a variable `"address"` it will be copied to the
 output. 
 
 In some of the examples below we reuse the geocode data frames created above, and we here create a vector of
-datetime objects differing in their date. The default time zone of function `ymd()` is `NULL`, so we override it with `EET` to match the geocodes for Finnish cities.
+datetime objects differing in their date. The default time zone of function `ymd()` is `NULL`, so we override it with `Europe/Helsinki` to match the geocodes for Finnish cities.
 
 ```{r}
-dates <- ymd("2015-03-01", tz = "EET") + months(0:5)
+dates <- ymd("2015-03-01", tz = "Europe/Helsinki") + months(0:5)
 dates
 ```
 
-As first example we compute the sunrise time for the current day in Helsinki, with the result returned eithe in UTC or EET coordinates. Time-zone names based on continent and city are also supported, and are to be preferred for past dates and the relationship between time zones and locations are affected by changes in country boundaries and in national laws.
+As first example we compute the sunrise time for the current day in Helsinki, with the result returned either in UTC or local time coordinates. Time-zone names based on continent and city ("Europe/Helsinki") or continent, country and city ("America/Argentina/Buenos Aires") are supported, while the names "EET" and "CET" and their summer-time versions are no longer supported by R (>= 4.5.0). They have been long deprecated as they do not describe true time zones, and different are within these regions have been in different time zones in the past, making it impossible some computations. Dates and the relationship between time zones and locations have been affected by changes in country boundaries and in national laws.
+
+At least in R (< 4.5.0) the "EET", "CET", etc. are still used when printing or formatting the output. When not needed, the time zone abbreviation can be disabled in printing and formatting.
 
 ```{r}
-sunrise_time(now("UTC"), geocode = my.geocode)
-sunrise_time(now("EET"), geocode = my.geocode)
-sunrise_time(now("Europe/Helsinki"), geocode = my.geocode)
+# defaults to current UTC date and Greenwich, UK as location
+sunrise_time()
+sunrise_time(date = now(), tz = "Europe/Helsinki", geocode = my.geocode)
+sunrise_time(date = now(tzone = "Europe/Helsinki"), geocode = my.geocode)
+# time zone abbreviation not shown
+print(sunrise_time(date = now("Europe/Helsinki"), 
+                   geocode = my.geocode),
+      usetz = FALSE)
 ```
 
 ----
 
-Be aware of the behaviour of functions `ymd()`, `dmy()`, `ym()` and `my()` from package 'lubridate'. A function call like `ymd("2015-03-01", tz = "UTC")` returns a `POSIXct` object while a call like `ymd("2015-03-01")` is equivalent to `ymd("2015-03-01", tz = NULL)` and returns a `Date` object. `Date` objects do not carry time zone information in the way `POSIXct` objects do, and consequently `Dates` do not uniquely match a period between two absolute instants in time, but rather between two instants in local time. Given these features, it is safer to use `POSIXct` objects as arguments to the functions from package 'SunCalcMeeus'. Function `today()` always returns a `Date` while function `now()` always returns a `POSIXct`, independently of the argument passed to their `tzone` parameter. Consequently it is preferable to use `now()`, but if you do use `today()` make sure to path the same value as argument to parameter `tzone` of `today()` and to parameter `tz` of the functions from package 'SunCalcMeeus'. _An instant in time and time zone strictly define a corresponding date at any location on Earth._
+Be aware of the behaviour of functions `ymd()`, `dmy()`, `ym()` and `my()` from package 'lubridate'. A function call like `ymd("2015-03-01", tz = "UTC")` returns a `POSIXct` object while a call like `ymd("2015-03-01")` is equivalent to `ymd("2015-03-01", tz = NULL)` and returns a `Date` object. `Date` objects do not carry time zone information in the way `POSIXct` objects do, and consequently `Dates` do not uniquely match a period between two absolute instants in time, but rather between two instants in local time. Given these features, it is safer to use `POSIXct` objects as arguments to the functions from package 'SunCalcMeeus'. Function `today()` always returns a `Date` while function `now()` always returns a `POSIXct`, independently of the argument passed to their `tzone` parameter. Consequently it is preferable to use `now()`, but if you do use `today()` make sure to path the same value as argument to parameter `tzone` of `today()` and to parameter `tz` of the functions from package 'SunCalcMeeus'. _An instant in time and time zone strictly define a corresponding date at any location on Earth, even though the date is not the same at all these locations._
 
 The default for time zone is that of the `POSIXct` value passed as argument to parameter `date`, but this can be overridden.
 
 ```{r}
+## Using date times as POSIXct
 sunrise_time(geocode = my.geocode)
 sunrise_time(date = now("UTC"), geocode = my.geocode)
 sunrise_time(date = now("UTC"), tz = "UTC", geocode = my.geocode)
-sunrise_time(date = now("EET"), geocode = my.geocode)
-sunrise_time(date = now("EET"), tz = "EET", geocode = my.geocode)
-sunrise_time(today("EET"), tz = "EET", geocode = my.geocode)
+sunrise_time(date = now("Europe/Helsinki"), geocode = my.geocode)
+sunrise_time(date = now("Europe/Helsinki"), tz = "Europe/Helsinki", geocode = my.geocode)
+## Using Date
+# correct always as time zones match
+sunrise_time(today("Europe/Helsinki"), tz = "Europe/Helsinki", geocode = my.geocode)
+# sometimes will be correct and sometimes off by 1 d
+sunrise_time(today("Australia/Canberra"), tz = "Europe/Helsinki", geocode = my.geocode)
 ```
 
 ----
@@ -220,12 +232,12 @@ We can also compute the time of solar noon and of sunset.
 
 ```{r}
 noon_time(now("UTC"), geocode = my.geocode)
-noon_time(now("EET"), geocode = my.geocode)
+noon_time(now("Europe/Helsinki"), geocode = my.geocode)
 ```
 
 ```{r}
 sunset_time(now("UTC"), geocode = my.geocode)
-sunset_time(now("EET"), geocode = my.geocode)
+sunset_time(now("Europe/Helsinki"), geocode = my.geocode)
 ```
 
 Functions `day_length()` and `night_length()` return the length of time, by default in hours and fraction.
@@ -256,16 +268,16 @@ default for `twilight` is `"none"` meaning that times correspond to the
 occlusion of the upper rim of the sun disk below the theoretical horizon.
 
 ```{r}
-sunrise_time(ymd("2017-03-21", tz = "EET"), 
-             tz = "EET", 
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
              geocode = my.geocode,
              twilight = "civil")
-sunrise_time(ymd("2017-03-21", tz = "EET"), 
-             tz = "EET", 
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
              geocode = my.geocode,
              twilight = -10)
-sunrise_time(ymd("2017-03-21", tz = "EET"), 
-             tz = "EET", 
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
              geocode = my.geocode,
              twilight = +12)
 ```
@@ -275,11 +287,11 @@ time-of-day in hours, minutes, or seconds since midnight, instead of the default
 `datetime`.
 
 ```{r}
-sunrise_time(ymd("2017-03-21", tz = "EET"), 
-             tz = "EET", 
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
              geocode = my.geocode)
-sunrise_time(ymd("2017-03-21", tz = "EET"), 
-             tz = "EET", 
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
              geocode = my.geocode,
              unit.out = "hours")
 ```
@@ -376,13 +388,40 @@ Solar elevation determines the length of the path of the sun beam through the
 Earth's atmosphere. This affects the solar spectrum at ground level, specially
 the UVB region. Function `relative_AM()` can be used to calculate an empirical
 _estimate_ of this quantity from elevation angles in degrees. This function is
-vectorised.
+vectorised. As seem above the apparent position of the sun for an observer on
+Earth differs from the true astronomical position as a result of atmospheric
+refraction. The functions presented above, can apply a correction based on
+an estimate of atmospheric refraction. If the correction is applied we obtain 
+apparent sun elevation angles suitable for estimating the relative air mass
+with Kasten and Youngs' (1989) equation as follows.
 
 ```{r}
 relative_AM(33)
 ```
 
 ```{r}
-relative_AM(c(80, 60, 40, 20))
+relative_AM(c(90, 60, 40, 20, 10, 5, 2, 1, 0.5))
 ```
 
+Young's (1994) equation can be used to estimate AM from the true sun elevation.
+At high solar elevations the impact of atmospheric refraction is very small
+but at low elevations is is large enough to make a clear difference in the
+AM estimates.
+
+```{r}
+relative_AMt(33)
+```
+
+```{r}
+relative_AMt(c(90, 60, 40, 20, 10, 5, 2, 1, 0.5))
+```
+
+Two additional functions make it possible to compute the relative AM from time and geographic coordinates. They both apply a correction for atmospheric refraction, but using two different algorithms in the sun elevation computation or in Young's (1994) equation. The difference is small.
+
+```{r}
+january.times <- ymd_h("2020-01-01 12", tz = "Europe/Helsinki") + hours(-2:+2)
+relative_AM_geotime(january.times, my.geocode, tz = "Europe/Helsinki")
+```
+```{r}
+relative_AMt_geotime(january.times, my.geocode, tz = "Europe/Helsinki")
+```

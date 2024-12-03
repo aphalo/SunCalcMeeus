@@ -24,7 +24,8 @@ Suggests:
     testthat (>= 3.2.1),
     roxygen2 (>= 7.3.0),
     lutz (>= 0.3.2),
-    covr
+    covr,
+    spelling
 LazyLoad: yes
 ByteCompile: true
 URL: https://docs.r4photobiology.info/SunCalcMeeus/,
@@ -33,3 +34,4 @@ BugReports: https://github.com/aphalo/SunCalcMeeus/issues
 Encoding: UTF-8
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr
+Language: en-US

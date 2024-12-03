@@ -27,7 +27,7 @@ Package 'photobiology' is at the core of a suite of packages for
 analysis and plotting of data relevant to photobiology (described at
 <https://www.r4photobiology.info/>). The accompanying packages provide
 data and definitions that are to a large extent application-area
-specific while the functions in the package 'photobioloy' are widely
+specific while the functions in the package 'photobiology' are widely
 useful in photobiology and in radiation quantification in geophysics and
 meteorology. Package 'photobiology' has its main focus in the
 characterization of the light environment in a biologically relevant
@@ -111,12 +111,12 @@ implements facilities for plotting spectral data by extending package
 | 'photobiologySun'           | Spectral irradiance and other data for sunlight. Both measured and standard definitions for ground level and top of the atmosphere.                                                                     |
 | 'photobiologyFilters'       | Spectral transmittance and spectral reflectance data for different materials including optical filters. Spectral data on refractive index.                                                              |
 | 'ggspectra'                 | Extensions to package 'ggplot2' for easier plotting of spectral data, including `autoplot()` and `ggplot()` methods for the classes defined in package 'photobiology' and scales, geoms and statistics. |
-| 'oocquire' (Not in CRAN)    | Data acquision and control of Ocean Optics (now Ocean Insight) spectrometers.                                                                                                                           |
+| 'oocquire' (Not in CRAN)    | Data acquisition and control of Ocean Optics (now Ocean Insight) spectrometers.                                                                                                                           |
 | 'rOmniDriver' (Not in CRAN) | Interface to OmniDriver drivers for communication with spectrometers from Ocean Optics (now Ocean Insight)                                                                                              |
 
 For additional information on these and other packages by the author
 please visit (<https://www.r4photobiology.info>) for news, and
-check the menue entry **R Packages > Checks and Issues** for current status
+check the menu entry **R Packages > Checks and Issues** for current status
 and links to on-line documentation and public Git repositories. Each
 package has its own public Git repository at my [GitHub account](<https://github.com/aphalo/>) from
 where the source code of the current and earlier versions can be cloned

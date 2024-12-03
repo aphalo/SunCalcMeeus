@@ -108,24 +108,26 @@ than searched for.
 my.geocode <- data.frame(lat = 60.16, lon = 24.93, address = "Helsinki")
 ```
 
-Be aware that to obtain correct the time zone must be correctly set for the
+Be aware that to obtain correct computed values the time zone must be correctly set for the
 argument passed to `time`. To obtain results based on local time, this time zone
 needs to be set in the `POSIXct` object or passed as a argument to `tz`. In the
 examples we use functions from package 'lubridate' for working with times and
 dates. The argument passed to parameter `time` can be a "vector" of `POSIXct`
-values. The returned value is a `data.frame`.
+values. The returned value is a `data.frame` with one row per time instant or
+per geographic location.
 
 The position of the sun at Helsinki, at the given instant in time for
-time zone _Eastern European Time_.
+time zone `"Europe/Helsinki"`, which matches _Eastern European Time_.
 
 ```{r}
 sun_angles(time = ymd_hms("2017-06-20 08:00:00", tz = "Europe/Helsinki"), 
            geocode = my.geocode)
 ```
 
-Functions have defaults for their arguments, but rarely Greenwich will be the
-location you are interested in. Current UTC time is probably a useful default in
-some cases.
+Functions have defaults for their arguments, Greenwhich in U.K. and the
+corresponding time zone "UTC". In most cases Greenwich will not be the location
+you are interested in. Current UTC time is more likely to be a useful default as
+it avoids the difficulty of time shifts in local time coordinates.
 
 ```{r}
 sun_angles()
@@ -156,8 +158,11 @@ sun_angles(time = my.times, geocode = two.geocodes)
 ```
 
 If what is needed is only one of the solar angles, functions returning vectors
-instead of data frames can be useful. (In their current implementation these
-functions _do not_ have improved performance compared to `sun_angles()`)
+instead of data frames can be useful. _In their current implementation these
+functions **do not** have improved performance compared to `sun_angles()`_. Thus
+if more than one angle is needed, it is more efficient to compute all angles
+with function `sun_angles()` and later extract the vectors from the returned
+data frame.
 
 ```{r}
 sun_elevation(time = my.times, geocode = my.geocode)
@@ -175,10 +180,10 @@ sun_azimuth(time = my.times, geocode = my.geocode)
 
 Convenience functions `sunrise_time()`, `sunset_time()`, `noon_time()`, `day_length()` and
 `night_length()` have all the same parameter signature and are wrappers on function `day_night()`. Function
-`day_night` returns a data frame containing all the quantities returned by the
+`day_night` returns a data frame containing all the quantities returned by these
 other functions. 
 
-These functions are vectorized for their `date` and `geocode` parameters. They use as default location Greenwich in the U.K., and default time zone "UTC". The date is given by default by the current date based on "UTC". Universal Time Coordinate ("UTC") is the reference used to describe differences among time zones and is never modified by daylight saving time or summer time. The difference between "Europe/Helsinki" (matching Eastern European Time) and UTC is +2 hours in winter and (matching Eastern European Summer Time) +3 hours in summer.
+These functions are vectorized for their `date` and `geocode` parameters. They use as default location Greenwich in the U.K., and corresponding default time zone "UTC". The date is given by default by the current date based on "UTC". Universal Time Coordinate ("UTC") is the reference used to describe differences among time zones and is never modified by daylight saving time or summer time. The difference between "Europe/Helsinki" (matching Eastern European Time) and UTC is +2 hours in winter and (matching Eastern European Summer Time) +3 hours in summer.
 
 Latitude and longitude are passed through a `geocode` (a data frame). If the returned value is desired in the local time coordinates of the argument passed to `geocode`, the time zone should match the geographic coordinates. If geocodes contain a variable `"address"` it will be copied to the
 output. 
@@ -192,6 +197,18 @@ dates
 ```
 
 As first example we compute the sunrise time for the current day in Helsinki, with the result returned either in UTC or local time coordinates. Time-zone names based on continent and city ("Europe/Helsinki") or continent, country and city ("America/Argentina/Buenos Aires") are supported, while the names "EET" and "CET" and their summer-time versions are no longer supported by R (>= 4.5.0). They have been long deprecated as they do not describe true time zones, and different are within these regions have been in different time zones in the past, making it impossible some computations. Dates and the relationship between time zones and locations have been affected by changes in country boundaries and in national laws.
+
+Use of the Olson time zone names like `"Europe/Helsinki"` is recommended. The list is available in R and can be searched.
+
+```{r}
+grep("Argentina", OlsonNames(), value = TRUE)
+```
+
+The time zone in use by the computer on which R is running can be found out with the following code.
+
+```{r}
+Sys.timezone()
+```
 
 At least in R (< 4.5.0) the "EET", "CET", etc. are still used when printing or formatting the output. When not needed, the time zone abbreviation can be disabled in printing and formatting.
 
@@ -210,7 +227,7 @@ print(sunrise_time(date = now("Europe/Helsinki"),
 
 Be aware of the behaviour of functions `ymd()`, `dmy()`, `ym()` and `my()` from package 'lubridate'. A function call like `ymd("2015-03-01", tz = "UTC")` returns a `POSIXct` object while a call like `ymd("2015-03-01")` is equivalent to `ymd("2015-03-01", tz = NULL)` and returns a `Date` object. `Date` objects do not carry time zone information in the way `POSIXct` objects do, and consequently `Dates` do not uniquely match a period between two absolute instants in time, but rather between two instants in local time. Given these features, it is safer to use `POSIXct` objects as arguments to the functions from package 'SunCalcMeeus'. Function `today()` always returns a `Date` while function `now()` always returns a `POSIXct`, independently of the argument passed to their `tzone` parameter. Consequently it is preferable to use `now()`, but if you do use `today()` make sure to path the same value as argument to parameter `tzone` of `today()` and to parameter `tz` of the functions from package 'SunCalcMeeus'. _An instant in time and time zone strictly define a corresponding date at any location on Earth, even though the date is not the same at all these locations._
 
-The default for time zone is that of the `POSIXct` value passed as argument to parameter `date`, but this can be overridden.
+The time zone used by default for the returned value is that of the `POSIXct` value passed as argument to parameter `date`. This behaviour can be overridden by an argument passed to `tz`. However, to obtain a correct value expressed in local time We must make sure that the time zone matches that at the `geocode` location.
 
 ```{r}
 ## Using date times as POSIXct
@@ -218,46 +235,48 @@ sunrise_time(geocode = my.geocode)
 sunrise_time(date = now("UTC"), geocode = my.geocode)
 sunrise_time(date = now("UTC"), tz = "UTC", geocode = my.geocode)
 sunrise_time(date = now("Europe/Helsinki"), geocode = my.geocode)
-sunrise_time(date = now("Europe/Helsinki"), tz = "Europe/Helsinki", geocode = my.geocode)
+sunrise_time(date = now(""), tz = "Europe/Helsinki", geocode = my.geocode)
 ## Using Date
 # correct always as time zones match
 sunrise_time(today("Europe/Helsinki"), tz = "Europe/Helsinki", geocode = my.geocode)
-# sometimes will be correct and sometimes off by 1 d
+# sometimes the value returned will be correct and sometimes off by 1 d at Helsinki
 sunrise_time(today("Australia/Canberra"), tz = "Europe/Helsinki", geocode = my.geocode)
 ```
 
 ----
 
-We can also compute the time of solar noon and of sunset.
+We can also compute the time at solar noon and at sunset.
 
 ```{r}
 noon_time(now("UTC"), geocode = my.geocode)
 noon_time(now("Europe/Helsinki"), geocode = my.geocode)
 ```
 
+By default, sunset and sunrise are defined as the time when the upper rim of the solar disk is at the horizon. How to override this default to account for twilight and or obstacles that occlude the sun will be shown later.
+
 ```{r}
 sunset_time(now("UTC"), geocode = my.geocode)
 sunset_time(now("Europe/Helsinki"), geocode = my.geocode)
+sunrise_time(now("Europe/Helsinki"), geocode = my.geocode)
 ```
 
-Functions `day_length()` and `night_length()` return the length of time, by default in hours and fraction.
+Functions `day_length()` and `night_length()` return the length of time between sunrise and sunset and between sunset and sunrise, respectively, by default expressed in hours and fraction.
 
 ```{r}
 day_length(dates, geocode = my.geocode)
 night_length(dates, geocode = my.geocode)
+day_length(dates, geocode = my.geocode, unit.out = "day")
 ```
 
 Southern hemisphere latitudes as well as longitudes to the West of the Greenwich
-meridian should be supplied as negative numbers.
+meridian should be supplied as negative numbers. In this case the time zone is
+abbreviated as a time difference from UTC. 
 
 ```{r}
-sunrise_time(dates, geocode = data.frame(lat = 60, lon = 25))
-noon_time(dates, geocode = data.frame(lat = 60, lon = 25))
-```
-
-```{r}
-sunrise_time(dates, geocode = data.frame(lat = -60, lon = 25))
-noon_time(dates, geocode = data.frame(lat = -60, lon = 25))
+sunrise_time(dates, tz = "America/Argentina/Buenos_Aires",
+             geocode = data.frame(lat = -34.6, lon = -58.3))
+noon_time(dates, tz = "America/Argentina/Buenos_Aires",
+             geocode = data.frame(lat = -34.6, lon = -58.3))
 ```
 
 The angle used in the twilight calculation can be supplied, either as the name
@@ -271,15 +290,63 @@ occlusion of the upper rim of the sun disk below the theoretical horizon.
 sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
              geocode = my.geocode,
-             twilight = "civil")
+             twilight = "none") # center of the sun disk
 sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = my.geocode,
+             twilight = "sunlight") # upper rim of the sun disk
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = my.geocode,
+             twilight = "rim") # lower rim of the sun disk
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = my.geocode,
+             twilight = "civil") # civil twilight = -6 degrees
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = my.geocode,
+             twilight = -10) # 10 degrees below the horizon
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = my.geocode,
+             twilight = +12) # 12 degrees above the horizon
+```
+
+Twilight is also relevant to the computation of day length and night length. The default is to use the centre of the sun disk, but this can be changed. For the values returned by `day_length()` and `night_length()` to add to 24 h they must be computed using the same twilight definition.
+
+```{r}
+day_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = my.geocode)
+day_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = my.geocode,
+             twilight = 0)
+day_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = my.geocode,
+             twilight = "rim")
+day_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = my.geocode,
+             twilight = "civil")
+day_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
              geocode = my.geocode,
              twilight = -10)
-sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+```
+
+Say if there is a mountain blocking the view above the Western horizon, we can set different twilight angles for sunrise and sunset. 
+```{r}
+day_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+           tz = "Europe/Helsinki", 
+           geocode = my.geocode,
+           twilight = c(0, 12))
+night_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
              geocode = my.geocode,
-             twilight = +12)
+             twilight = c(0, 12))
 ```
 
 Parameter `unit.out` can be used to obtain the returned value expressed as
@@ -346,7 +413,7 @@ day_night(dates[1:3],
 ## Solar time
 
 In field research it is in many cases preferable to sample or measure, and
-present and plot data based on local solar time. A new class is defined in package 'SunCalcMeeus', with a print method, a constructor, a conversion function and a class query function.
+present and plot data based on local solar time. A new class is defined in package 'SunCalcMeeus', with `print()` and `format()` method, a constructor, a conversion function and a class query function.
 
 The constructor takes as arguments a `POSIXct` object describing and instant in time and a geocode describing the geographic coordinates. 
 
@@ -371,9 +438,17 @@ is.timepoint(my.solar.d)
 
 ## Time of day
 
-Function `as_tod()` facilitates conversion of R's time date objects into a
-numeric value representing the time of day as numerical value with a decimal 
-fraction using one of hour, minute or second as unit of expression. While solar time is based on the astronomical position of the sun, time of day is based on the time coordinates for a time zone.
+When analysing data as a time series the usual way to represent time is as a 
+date plus time value, i.e., as an instant in time. In contrast, when data need
+to summarised or plotted as a function of time of day, the date portion of a
+data time representation of time becomes a nuisance.
+
+Function `as_tod()` facilitates conversion of R's time date objects into values
+representing the time of day as numerical value giving the time elapsed since
+the most recent past midnight. This value can be represented as a numeric value
+using `"day"`, `"hour"`, `"minute"` or `"second"` as unit of expression. While
+solar time is based on the astronomical position of the sun, time of day is
+based on the time coordinates for a time zone.
 
 ```{r}
 times <- now(tzone = "UTC") + hours(0:6)
@@ -386,14 +461,14 @@ as_tod(times, unit.out = "minutes")
 
 Solar elevation determines the length of the path of the sun beam through the
 Earth's atmosphere. This affects the solar spectrum at ground level, specially
-the UVB region. Function `relative_AM()` can be used to calculate an empirical
-_estimate_ of this quantity from elevation angles in degrees. This function is
-vectorised. As seem above the apparent position of the sun for an observer on
-Earth differs from the true astronomical position as a result of atmospheric
-refraction. The functions presented above, can apply a correction based on
-an estimate of atmospheric refraction. If the correction is applied we obtain 
-apparent sun elevation angles suitable for estimating the relative air mass
-with Kasten and Youngs' (1989) equation as follows.
+in the UV-B region. Function `relative_AM()` can be used to calculate an
+empirical _estimate_ of this quantity from elevation angles in degrees. This
+function is vectorised. As seem above the apparent position of the sun for an
+observer on Earth differs from the true astronomical position as a result of
+atmospheric refraction. The functions presented above, can apply a correction
+based on an estimate of atmospheric refraction. If the correction is applied we
+obtain apparent sun elevation angles suitable for estimating the relative air
+mass with Kasten and Youngs' (1989) equation as follows.
 
 ```{r}
 relative_AM(33)
@@ -416,7 +491,7 @@ relative_AMt(33)
 relative_AMt(c(90, 60, 40, 20, 10, 5, 2, 1, 0.5))
 ```
 
-Two additional functions make it possible to compute the relative AM from time and geographic coordinates. They both apply a correction for atmospheric refraction, but using two different algorithms in the sun elevation computation or in Young's (1994) equation. The difference is small.
+Two additional functions make it possible to compute the relative AM from time and geographic coordinates. They both apply a correction for atmospheric refraction, but using two different algorithms in the sun elevation computation or in Young's (1994) equation. The difference is small. These convenience functions are wrappers on `relative_AM()` and `relative_AMt()` that call function `sun_elevation()` to obtain the input to pass to the wrapped functions. 
 
 ```{r}
 january.times <- ymd_h("2020-01-01 12", tz = "Europe/Helsinki") + hours(-2:+2)

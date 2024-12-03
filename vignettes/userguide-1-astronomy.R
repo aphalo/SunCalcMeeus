@@ -50,6 +50,12 @@ dates <- ymd("2015-03-01", tz = "Europe/Helsinki") + months(0:5)
 dates
 
 ## -----------------------------------------------------------------------------
+grep("Argentina", OlsonNames(), value = TRUE)
+
+## -----------------------------------------------------------------------------
+Sys.timezone()
+
+## -----------------------------------------------------------------------------
 # defaults to current UTC date and Greenwich, UK as location
 sunrise_time()
 sunrise_time(date = now(), tz = "Europe/Helsinki", geocode = my.geocode)
@@ -65,11 +71,11 @@ sunrise_time(geocode = my.geocode)
 sunrise_time(date = now("UTC"), geocode = my.geocode)
 sunrise_time(date = now("UTC"), tz = "UTC", geocode = my.geocode)
 sunrise_time(date = now("Europe/Helsinki"), geocode = my.geocode)
-sunrise_time(date = now("Europe/Helsinki"), tz = "Europe/Helsinki", geocode = my.geocode)
+sunrise_time(date = now(""), tz = "Europe/Helsinki", geocode = my.geocode)
 ## Using Date
 # correct always as time zones match
 sunrise_time(today("Europe/Helsinki"), tz = "Europe/Helsinki", geocode = my.geocode)
-# sometimes will be correct and sometimes off by 1 d
+# sometimes the value returned will be correct and sometimes off by 1 d at Helsinki
 sunrise_time(today("Australia/Canberra"), tz = "Europe/Helsinki", geocode = my.geocode)
 
 ## -----------------------------------------------------------------------------
@@ -79,32 +85,75 @@ noon_time(now("Europe/Helsinki"), geocode = my.geocode)
 ## -----------------------------------------------------------------------------
 sunset_time(now("UTC"), geocode = my.geocode)
 sunset_time(now("Europe/Helsinki"), geocode = my.geocode)
+sunrise_time(now("Europe/Helsinki"), geocode = my.geocode)
 
 ## -----------------------------------------------------------------------------
 day_length(dates, geocode = my.geocode)
 night_length(dates, geocode = my.geocode)
+day_length(dates, geocode = my.geocode, unit.out = "day")
 
 ## -----------------------------------------------------------------------------
-sunrise_time(dates, geocode = data.frame(lat = 60, lon = 25))
-noon_time(dates, geocode = data.frame(lat = 60, lon = 25))
-
-## -----------------------------------------------------------------------------
-sunrise_time(dates, geocode = data.frame(lat = -60, lon = 25))
-noon_time(dates, geocode = data.frame(lat = -60, lon = 25))
+sunrise_time(dates, tz = "America/Argentina/Buenos_Aires",
+             geocode = data.frame(lat = -34.6, lon = -58.3))
+noon_time(dates, tz = "America/Argentina/Buenos_Aires",
+             geocode = data.frame(lat = -34.6, lon = -58.3))
 
 ## -----------------------------------------------------------------------------
 sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = my.geocode,
+             twilight = "none") # center of the sun disk
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = my.geocode,
+             twilight = "sunlight") # upper rim of the sun disk
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = my.geocode,
+             twilight = "rim") # lower rim of the sun disk
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = my.geocode,
+             twilight = "civil") # civil twilight = -6 degrees
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = my.geocode,
+             twilight = -10) # 10 degrees below the horizon
+sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = my.geocode,
+             twilight = +12) # 12 degrees above the horizon
+
+## -----------------------------------------------------------------------------
+day_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = my.geocode)
+day_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = my.geocode,
+             twilight = 0)
+day_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+             tz = "Europe/Helsinki", 
+             geocode = my.geocode,
+             twilight = "rim")
+day_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
              geocode = my.geocode,
              twilight = "civil")
-sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+day_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
              geocode = my.geocode,
              twilight = -10)
-sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+
+## -----------------------------------------------------------------------------
+day_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
+           tz = "Europe/Helsinki", 
+           geocode = my.geocode,
+           twilight = c(0, 12))
+night_length(ymd("2017-03-21", tz = "Europe/Helsinki"), 
              tz = "Europe/Helsinki", 
              geocode = my.geocode,
-             twilight = +12)
+             twilight = c(0, 12))
 
 ## -----------------------------------------------------------------------------
 sunrise_time(ymd("2017-03-21", tz = "Europe/Helsinki"), 

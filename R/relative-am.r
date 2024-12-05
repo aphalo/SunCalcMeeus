@@ -35,6 +35,8 @@
 #'
 #' @seealso \code{\link{sun_angles}}
 #'
+#' @return A numeric vector with the relative air mass values.
+#'
 #' @export
 #'
 #' @references

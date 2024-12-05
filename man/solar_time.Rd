@@ -12,7 +12,7 @@ solar_time(
 }
 \arguments{
 \item{time}{POSIXct Time, any valid time zone (TZ) is allowed, default is
-current time}
+current time.}
 
 \item{geocode}{data frame with variables lon and lat as numeric values
 (degrees).}

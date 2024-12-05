@@ -14,7 +14,7 @@
 \item{sep}{character used as separator}
 }
 \description{
-Format a \code{tod_time} object for pretty printing
+Format a \code{tod_time} object into a character string for pretty printing.
 }
 \seealso{
 Other Time of day functions: 

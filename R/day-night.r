@@ -100,6 +100,11 @@
 #' differences in the returned times compared to our function that seem to be
 #' related to the estimation of atmospheric refraction (about 0.1 degrees).
 #'
+#' @return The value returned represents an instant in time or a duration. The
+#' class of the object returned varies depending on the argument passed to
+#' parameter \code{unit.out}. If \code{unit.out = "datetime"}, the returned
+#' value is a "POSIXct" vector, otherwise it is a "numeric" vector.
+#'
 #' @export
 #' @examples
 #' library(lubridate)
@@ -447,6 +452,7 @@ sunset_time <- function(date = lubridate::now(tzone = "UTC"),
 #' @export
 #' @return \code{day_length} and \code{night_length} return numeric a vector
 #'   giving the length in hours
+#'
 day_length <- function(date = lubridate::now(tzone = "UTC"),
                        tz = "UTC",
                        geocode = tibble::tibble(lon = 0,
@@ -467,6 +473,7 @@ day_length <- function(date = lubridate::now(tzone = "UTC"),
 #' @note \code{night_length} returns the length of night-time conditions in one
 #'   day (00:00:00 to 23:59:59), rather than the length of the night between two
 #'   consecutive days.
+#'
 night_length <- function(date = lubridate::now(tzone = "UTC"),
                          tz = "UTC",
                          geocode = tibble::tibble(lon = 0,

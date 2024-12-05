@@ -9,15 +9,21 @@ as.solar_date(x, time)
 \arguments{
 \item{x}{solar_time object.}
 
-\item{time}{an R date time object}
+\item{time}{an R date time object that provides the date part.}
 }
 \value{
-For method \code{as.solar_date()} a date-time object with the class attr
-  set to "solar.time". This is needed only for unambiguous formatting and
+An object of class "solar.date" object derived
+  from POSIXct. This is needed only for unambiguous formatting and
   printing.
 }
 \description{
 Convert a solar_time object into solar_date object
+}
+\details{
+Objects of class "solar_time" lack date information, it describes
+ the time since local astronomical or true midnight. This function
+ adds the date information from the argument passed to time \code{time}
+ assembling a modified \code{time} object of class "solar_date".
 }
 \seealso{
 Other Local solar time functions: 

@@ -93,6 +93,11 @@ A tibble with variables day, tz, twilight.rise, twilight.set,
   longitude, latitude, address, sunrise, noon, sunset, daylength,
   nightlength or the corresponding individual vectors.
 
+The value returned represents an instant in time or a duration. The
+class of the object returned varies depending on the argument passed to
+parameter \code{unit.out}. If \code{unit.out = "datetime"}, the returned
+value is a "POSIXct" vector, otherwise it is a "numeric" vector.
+
 \code{is_daytime()} returns a logical vector, with \code{TRUE} for
   day time and \code{FALSE} for night time.
 

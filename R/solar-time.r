@@ -13,7 +13,7 @@
 #' use or not of daylight saving time.
 #'
 #' @param time POSIXct Time, any valid time zone (TZ) is allowed, default is
-#'   current time
+#'   current time.
 #' @param geocode data frame with variables lon and lat as numeric values
 #'   (degrees).
 #' @param unit.out character string, One of "datetime", "time", "hour", "minute", or
@@ -83,10 +83,15 @@ solar_time <- function(time = lubridate::now(),
 #' Convert a solar_time object into solar_date object
 #'
 #' @param x solar_time object.
-#' @param time an R date time object
+#' @param time an R date time object that provides the date part.
 #'
-#' @return For method \code{as.solar_date()} a date-time object with the class attr
-#'   set to "solar.time". This is needed only for unambiguous formatting and
+#' @details Objects of class "solar_time" lack date information, it describes
+#'  the time since local astronomical or true midnight. This function
+#'  adds the date information from the argument passed to time \code{time}
+#'  assembling a modified \code{time} object of class "solar_date".
+#'
+#' @return An object of class "solar.date" object derived
+#'   from POSIXct. This is needed only for unambiguous formatting and
 #'   printing.
 #'
 #' @family Local solar time functions
@@ -98,7 +103,7 @@ as.solar_date <- function(x, time)
   stopifnot(is.solar_time(x))
   stopifnot(lubridate::is.timepoint(time))
   solar.date <-
-    lubridate::floor_date(time, unit = "days") +
+    lubridate::floor_date(as.POSIXct(time), unit = "days") +
     lubridate::seconds(as.numeric(x) * 3600)
   class(solar.date) <- c("solar_date", class(solar.date))
   solar.date
@@ -109,6 +114,9 @@ as.solar_date <- function(x, time)
 #' @param x an R object.
 #'
 #' @family Local solar time functions
+#'
+#' @return A logical value indicating if the object \code{x} is of class
+#' \code{"solar_time"} or \code{"solar_date"}, depending on the function.
 #'
 #' @export
 #'
@@ -134,6 +142,9 @@ is.solar_date <- function(x) {
 #'
 #' @family astronomy related functions
 #'
+#' @return A character string with the time formatted as "HH:MM:SS", where ":"
+#' is the argument passed to \code{sep}.
+#'
 #' @export
 #'
 format.solar_time <- function(x, ..., sep = ":") {
@@ -148,12 +159,16 @@ format.solar_time <- function(x, ..., sep = ":") {
 
 #' Print solar time and solar date objects
 #'
+#' The object \code{x} is printed and returned invisibly.
+#'
 #' @param x an R object
 #' @param ... passed to \code{format} method
 #'
 #' @family Local solar time functions
 #'
-#' @note Default is to print the underlying POSIXct as a solar time.
+#' @note Default is to print the underlying POSIXct or Date as a solar time.
+#'
+#' @return Returns object \code{x}, invisibly.
 #'
 #' @export
 #'

@@ -2,14 +2,16 @@ Package: SunCalcMeeus
 Type: Package
 Title: Sun Position and Daylight Calculations
 Version: 0.1.1
-Date: 2024-12-02
+Date: 2024-12-05
 Authors@R:
    c(
     person("Pedro J.", "Aphalo", email = "pedro.aphalo@helsinki.fi", role = c("aut", "cre"), comment = c(ORCID = "0000-0003-3385-972X"))
     )
 Description: Compute the position of the sun, and local solar time using Meeus'
-    very accurate formulae. Compute day and/or night length using different
-    twilight definitions or arbitrary sun elevation angles.
+    formulae. Compute day and/or night length using different
+    twilight definitions or arbitrary sun elevation angles. This package is 
+    part of the 'r4photobiology' suite, Aphalo, P. J. (2015)
+    <doi:10.19232/uv4pb.2015.1.14>. Algorithms from Meeus (1998, ISBN:0943396611).
 License: GPL (>= 2)
 Depends:
     R (>= 4.0.0)

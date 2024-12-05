@@ -7,18 +7,19 @@
 as_tod(x, unit.out = "hours", tz = NULL)
 }
 \arguments{
-\item{x}{a datetime object accepted by lubridate functions}
+\item{x}{a datetime object accepted by lubridate functions.}
 
-\item{unit.out}{character string, One of "tod_time", "hours", "minutes", or "seconds".}
+\item{unit.out}{character string, One of "tod_time", "hours", "minutes", or
+"seconds".}
 
 \item{tz}{character string indicating time zone to be used in output.}
 }
 \value{
 A numeric vector of the same length as \code{x}. If
   \code{unit.out = "tod_time"} an object of class \code{"tod_time"} which
-  the same as for \code{unit.out = "hours"} but with the class attribute
-  set, which dispatches to special \code{format()} and \code{print()}
-  methods.
+  a numeric vector as with \code{unit.out = "hours"} but with the class
+  attribute set to \code{"tod_time"}, which dispatches to special
+  \code{format()} and \code{print()} methods.
 }
 \description{
 Convert a datetime into a time of day expressed in hours, minutes or seconds

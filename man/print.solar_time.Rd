@@ -14,11 +14,14 @@
 
 \item{...}{passed to \code{format} method}
 }
+\value{
+Returns object \code{x}, invisibly.
+}
 \description{
-Print solar time and solar date objects
+The object \code{x} is printed and returned invisibly.
 }
 \note{
-Default is to print the underlying POSIXct as a solar time.
+Default is to print the underlying POSIXct or Date as a solar time.
 }
 \seealso{
 Other Local solar time functions: 

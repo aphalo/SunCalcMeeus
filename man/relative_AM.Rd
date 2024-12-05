@@ -49,6 +49,9 @@ allowed, default is current time.}
 \item{geocode}{data frame with variables lon and lat as numeric values
 (degrees), nrow > 1, allowed.}
 }
+\value{
+A numeric vector with the relative air mass values.
+}
 \description{
 Approximate relative air mass (AM) computed from the sun's apparent or true
 position (sun elevation or sun zenith angle) or from geographic and time

@@ -12,6 +12,10 @@ is.solar_date(x)
 \arguments{
 \item{x}{an R object.}
 }
+\value{
+A logical value indicating if the object \code{x} is of class
+\code{"solar_time"} or \code{"solar_date"}, depending on the function.
+}
 \description{
 Query class
 }

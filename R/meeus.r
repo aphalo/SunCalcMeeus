@@ -191,6 +191,7 @@ sunlight_duration <- function(ha.sunrise, unit.out = "hours") {
 #' @rdname julian_day
 #'
 #' @return datetime
+#'
 solar_datetime <- function(time, lat, lon, eq.of.time) {
   time + lubridate::seconds((eq.of.time + 4 * lon) * 60)
 }
@@ -198,6 +199,7 @@ solar_datetime <- function(time, lat, lon, eq.of.time) {
 #' @rdname julian_day
 #'
 #' @return numeric
+#'
 solar_tod <- function(time, lat, lon, eq.of.time) {
   stopifnot(lubridate::is.instant(time))
   tod <- as_tod(time, unit.out = "minutes", tz = "UTC")

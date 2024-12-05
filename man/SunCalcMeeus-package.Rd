@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Compute the position of the sun, and local solar time using Meeus' very accurate formulae. Compute day and/or night length using different twilight definitions or arbitrary sun elevation angles.
+Compute the position of the sun, and local solar time using Meeus' formulae. Compute day and/or night length using different twilight definitions or arbitrary sun elevation angles. This package is part of the 'r4photobiology' suite, Aphalo, P. J. (2015) \doi{10.19232/uv4pb.2015.1.14}. Algorithms from Meeus (1998, ISBN:0943396611).
 }
 \details{
 Please see the vignette \emph{0: The R for

@@ -5,15 +5,16 @@
 #' time-series data for different days needs to be compared or plotted based on
 #' the local time-of-day.
 #'
-#' @param x a datetime object accepted by lubridate functions
-#' @param unit.out character string, One of "tod_time", "hours", "minutes", or "seconds".
+#' @param x a datetime object accepted by lubridate functions.
+#' @param unit.out character string, One of "tod_time", "hours", "minutes", or
+#'   "seconds".
 #' @param tz character string indicating time zone to be used in output.
 #'
 #' @return A numeric vector of the same length as \code{x}. If
 #'   \code{unit.out = "tod_time"} an object of class \code{"tod_time"} which
-#'   the same as for \code{unit.out = "hours"} but with the class attribute
-#'   set, which dispatches to special \code{format()} and \code{print()}
-#'   methods.
+#'   a numeric vector as with \code{unit.out = "hours"} but with the class
+#'   attribute set to \code{"tod_time"}, which dispatches to special
+#'   \code{format()} and \code{print()} methods.
 #'
 #' @seealso \code{\link{solar_time}}
 #'
@@ -50,7 +51,7 @@ as_tod <- function(x, unit.out = "hours", tz = NULL) {
 
 #' Encode in a Common Format
 #'
-#' Format a \code{tod_time} object for pretty printing
+#' Format a \code{tod_time} object into a character string for pretty printing.
 #'
 #' @param x an R object
 #' @param ... ignored
@@ -72,12 +73,14 @@ format.tod_time <- function(x, ..., sep = ":") {
 
 #' Print time-of-day objects
 #'
+#' Defaults to print the underlying \code{numeric} vector as a solar time.
+#'
 #' @param x an R object
 #' @param ... passed to \code{format} method
 #'
-#' @family Time of day functions
+#' @return Returns object \code{x}, invisibly.
 #'
-#' @note Default is to print the underlying \code{numeric} vector as a solar time.
+#' @family Time of day functions
 #'
 #' @export
 #'

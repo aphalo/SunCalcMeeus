@@ -11,11 +11,11 @@
 
 \item{...}{passed to \code{format} method}
 }
-\description{
-Print time-of-day objects
+\value{
+Returns object \code{x}, invisibly.
 }
-\note{
-Default is to print the underlying \code{numeric} vector as a solar time.
+\description{
+Defaults to print the underlying \code{numeric} vector as a solar time.
 }
 \seealso{
 Other Time of day functions: 

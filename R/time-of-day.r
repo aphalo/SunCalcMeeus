@@ -57,6 +57,9 @@ as_tod <- function(x, unit.out = "hours", tz = NULL) {
 #' @param ... ignored
 #' @param sep character used as separator
 #'
+#' @return A character string with the time formatted as "HH:MM:SS", where ":"
+#' is the argument passed to \code{sep}.
+#'
 #' @family Time of day functions
 #'
 #' @export

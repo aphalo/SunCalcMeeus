@@ -13,6 +13,10 @@
 
 \item{sep}{character used as separator}
 }
+\value{
+A character string with the time formatted as "HH:MM:SS", where ":"
+is the argument passed to \code{sep}.
+}
 \description{
 Format a \code{tod_time} object into a character string for pretty printing.
 }

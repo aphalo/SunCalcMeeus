@@ -1,0 +1,452 @@
+---
+title: "Speed and Accuracy Tests"
+subtitle: "Package 'SunCalcMeeus' `r packageVersion('SunCalcMeeus')` "
+author: "Pedro J. Aphalo"
+date: "`r packageDate('SunCalcMeeus')`"
+output: 
+  rmarkdown::html_document:
+    toc: yes
+---
+
+## Introduction
+
+R package 'SunCalcMeeus' collects functions related to the computation of
+the position of the sun and times, including day length and night length, from
+package 'photobiology'. It also includes function for computing empirical
+estimates of the relative air mass (AM) for different sun elevation angles.
+
+The position of the sun is computed using Meeus well known algorithm, which is
+accurate over a broad range of dates both into the past and future. The
+algorithm is described as useful for dates between 1000 BC to 3000 AD, however
+accuracy of the implementation in 'SunCalcMeeus' could be affected by how Julian
+days are computed and the limited precision of the computer representation of
+real numbers as double precision floating point numbers. Results for years 1700
+to 2100 are checked below against the tables of the US Naval Observatory as
+reference.
+
+**Note:** Although for many uses, including biology, energy use and history research and
+applications, Meeus algorithm is considered very accurate, for use in astronomy,
+it is considered not the most accurate. One collection of libraries for
+astronomy, in FORTRAN and ANSI C versions, is provided by the International
+Astronomy Union under the name of Standards of Fundametal Astronomy
+[SOFA](http://www.iausofa.org/). The [NASA web page JPL
+Horizons](https://ssd.jpl.nasa.gov/) provides on-line computed up-to-date
+ephemerides for for huge number of celestial bodies covering from 9999 BC to
+9999 AD.
+
+A comparison to package 'suncalc' is also done both for performance and accuracy.
+This is of interest as the two packages are likely to differ both in performance
+and accuracy, and their use could preferable in different situations.
+
+
+```{r, message=FALSE}
+library(SunCalcMeeus)
+library(lubridate)
+library(dplyr)
+library(tidyr)
+library(readr)
+library(microbenchmark)
+library(suncalc)
+library(ggplot2)
+library(ggpp)
+library(ggdensity)
+```
+
+```{r, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(fig.width=8, fig.height=4)
+```
+
+```{r, eval=TRUE, include=FALSE}
+options(tibble.print_max = 4, tibble.print_min = 3)
+```
+
+## Accuracy
+
+### Sunset and sunrise times
+
+In this section I check the values from 'SunCalcMeeus' against the on-line data
+from the [Astronomical Applications Department of the U.S. Naval
+Observatory](https://aa.usno.navy.mil/data/index). For any comparison of sunrise
+or sunset times, it is important to ensure that the twilight definition used is
+the same. In other words, at what instant in time the start and end of the day
+are assumed to be is crucial. In addition, if an atmospheric refraction
+correction is applied or not must also be consistent. The astronomical
+definition of sunrise and sunset is when the upper rim of the solar disk is at
+the horizon, and most frequently a refraction correction is applied when the
+observer is on Earth. This corresponds to `twilight = "sunlight"` in the
+functions from 'SunCalcMeeus'.
+
+The format of the table downloaded, or more precisely copied and paste from the
+web page, is such that converting the data into a shape compatible with that
+used by 'SunCalcMeeus' takes a some effort. I use for the comparison the
+geographic location of Greenwhich, U.K., and the GMT time zone.
+
+```{r, warning=FALSE}
+# map
+vars2months <- rep(month.abb, each = 2)
+names(vars2months) <- paste("X", 2L:25L, sep = "")
+
+vars2rise_or_set <- rep(c("sunrise", "sunset"), times = 12)
+names(vars2rise_or_set) <- paste("X", 2L:25L, sep = "")
+
+for (this.year in c(1700, 1900, 2000, 2100)) {
+  read_fwf(paste("data/USNO-", this.year, ".txt", sep = ""), skip = 9, n_max = 31, 
+           col_types = "ccccccccccccccccccccccccc") |>
+    pivot_longer(X2:X25, values_to = "time", cols_vary = "slowest") |>
+    mutate(year = this.year,
+           month = vars2months[name],
+           day = X1,
+           event = vars2rise_or_set[name],
+           X1 = NULL,
+           name = NULL,
+           hhmm = ymd_hm(paste(year, "-", month, "-", day, " ", time, sep = ""),
+                         tz = "UTC"),
+           day = ymd(paste(year, "-", month, "-", day, sep = ""),
+                     tz = "UTC"),
+           time = NULL)|>
+    select(day, event, hhmm) -> all.data
+  
+  sunrises.df <- subset(all.data, event == "sunrise", select = -2)
+  names(sunrises.df)[2] <- "usno.sunrise"
+  sunsets.df <- subset(all.data, event == "sunset")
+  sunrises.df$usno.sunset <- sunsets.df$hhmm
+  usno.df <- na.omit(sunrises.df)
+  
+  meeus_times.df <- day_night(usno.df$day, unit.out = "datetime", twilight = "sunlight")
+  
+  full_join(meeus_times.df, usno.df, by = join_by(day)) |>
+    mutate(sunrise.diff = sunrise - usno.sunrise,
+           sunset.diff = sunset - usno.sunset) -> temp.df
+  
+  assign(paste("times_", this.year, ".df", sep = ""), temp.df)
+}  
+
+times_all.df <- bind_rows(times_1700.df, times_1900.df, times_2000.df, times_2100.df)
+times_all.df$year <- year(times_all.df$day)
+```
+
+The quantiles for the pooled differences from all years tested are:
+
+```{r}
+quantile(times_all.df$sunrise.diff)
+```
+
+```{r}
+quantile(times_all.df$sunset.diff)
+```
+
+Differences were in all cases less than $\pm 71$ s, while the resolution of the
+data from the U.S. Naval Observatory is 1 min. This good match was true for
+years 1700, 1900, 2000 and 2100, and for both sunrise and sunset times. So,
+Meeus algorithm is generating values differing little from known-good values.
+
+We plot the differences for these four years, both for sunrise and sunset.
+First as a density distribution and farther down in a scatter plots.
+
+```{r, message=FALSE}
+ggplot(times_all.df, aes(sunrise.diff)) +
+  stat_density() +
+  facet_wrap(facets = vars(year), labeller = label_both) +
+  expand_limits(x = c(-80, 80)) +
+  labs(x = "Difference in sunrise time (s)")
+```
+
+```{r, message=FALSE}
+ggplot(times_all.df, aes(sunset.diff)) +
+  stat_density() +
+  facet_wrap(facets = vars(year), labeller = label_both) +
+  expand_limits(x = c(-80, 80)) +
+  labs(x = "Difference in sunset time (s)")
+```
+
+```{r, message=FALSE}
+ggplot(times_all.df, aes(day, sunrise.diff)) +
+  geom_point() +
+  labs(y = "Difference in sunrise time (s)", x = "Date") +
+  scale_x_datetime(date_labels = "%b") +
+  facet_wrap(facets = vars(year), scales = "free_x", labeller = label_both)
+```
+
+```{r, message=FALSE}
+ggplot(times_all.df, aes(day, sunset.diff)) +
+  geom_point() +
+  labs(y = "Difference in sunset time (s)", x = "Date") +
+  scale_x_datetime(date_labels = "%b") +
+  facet_wrap(facets = vars(year), scales = "free_x", labeller = label_both)
+```
+
+'SunCalcMeeus' provides accurate estimates, but how does its performance
+compare to 'suncalc'? Is the possibly slower performance worth the expected
+improvement in accuracy?
+
+## Performance
+
+Meeus mathematical algorithm is more computationally intensive than other less
+accurate ones, such as that implemented in package 'suncalc'. However, I have
+optimized the implementation in 'SunCalcMeeus' for the case of long
+vectors of instants in time or of dates at each geographic location.
+
+**Note:** The equations used in 'suncalc' are "mostly" from the web page [Astronomy
+Answers](https://www.aa.quae.nl/en/reken/zonpositie.html). I was unable to find
+a published source for the algorithm other than the web page. It is not clear
+from the documentation if an atmospheric refraction correction is applied or
+not.
+
+### Sun position
+
+To check the call overhead, I start by benchmarking the computation of the sun
+position at a single instant in time at a single geographic location.
+
+```{r}
+time <- now()
+```
+
+```{r, warning=FALSE}
+microbenchmark(sun_angles(time), 
+               getSunlightPosition(date = time, lat = 51.5, lon = 0), 
+               times = 500L,
+               unit = "millisecond")
+```
+
+I next test the performance of the computation of the position of the sun with 'SunCalcMeeus' using 10 000 instants in time stored in a `POSIXct` vector and nine geographic locations in a `data.frame` with columns for longitude and latitude and rows for geographic locations.
+
+```{r}
+times <- ymd_hms("2024-12-11 00:00:00") + minutes(1:1e4)
+locations <- data.frame(lon = c(0, 0, 0, 90, 90, 90, -90, -90, -90),
+                        lat = c(0, 30, 60, 0, 30, 60, 0, 30, 60))
+range(times)
+```
+
+We benchmark performance by evaluating the statement 20 times. The median time
+is the most informative.
+
+```{r}
+microbenchmark(sun_angles(times, geocode = locations), 
+               times = 20L)
+```
+
+Next we will test the performance with 1 000 000 instants in time and one 
+geographic location, the default one (Greewich, UK).
+
+```{r}
+times <- ymd_hms("2024-12-11 00:00:00") + minutes(1:1e6)
+range(times)
+```
+There is one problem, possibly a division by zero, affecting azimuth for one
+instant in time.
+
+```{r}
+sun_angles.df <- sun_angles(times)
+sapply(sun_angles.df, anyNA)
+which(is.na(sun_angles.df$azimuth))
+sun_angles.df[which(is.na(sun_angles.df$azimuth)), ]
+```
+
+We run the benchmarks with the longer vector of instants in time:
+
+```{r, warning=FALSE}
+microbenchmark(sun_angles(times), 
+               getSunlightPosition(date = times, lat = 51.5, lon = 0), 
+               times = 5L,
+               unit = "second")
+```
+
+`sun_angles()` takes between 2.5 and 3.2 times as much time to run than
+`getSunlightPosition()` but returns six computed values while
+`getSunlightPosition` returns only two. For most uses they are both most likely
+fast enough.
+
+### Sunrise and sunset times
+
+Checking performance as above, but day by day for 600 years.
+
+```{r, warning=FALSE}
+dates <- ymd_hms("1700-01-01 00:00:00", tz = "UTC") + days(0:(600 * 365 + 145)) 
+length(dates)
+range(dates)
+```
+
+First just a single date to asses the call overhead.
+
+```{r, warning=FALSE}
+microbenchmark(day_night(dates[1]), 
+               day_night(dates[1], unit.out = "datetime"), 
+               getSunlightPosition(date = dates[1], lat = 51.5, lon = 0), 
+               times = 100L,
+               unit = "millisecond")
+```
+
+And with every day in 600 years.
+
+```{r, warning=FALSE}
+microbenchmark(day_night(dates), 
+               day_night(dates, unit.out = "datetime"), 
+               getSunlightPosition(date = dates, lat = 51.5, lon = 0), 
+               times = 10L,
+               unit = "second")
+```
+
+The difference is similar to that above for the position. But once again, for
+most uses they are both fast enough.
+
+```{r}
+meeus_dn.df <- day_night(dates[1], tz = "UTC", unit.out = "datetime", twilight = "sunlight")
+colnames(meeus_dn.df)
+```
+
+Now we use the 'suncalc' package to compute values for the same day.
+
+```{r}
+suncalc_dn.df <- getSunlightTimes(date = as.Date(dates[1], tz = "UTC"), lat = 51.5, lon = 0)
+colnames(suncalc_dn.df)
+```
+
+## Consistency between 'suncalc' and 'SunCalcMeeus'
+
+### Sun position
+
+The next question is do the values returned by functions from both packages
+agree? and does the agreement hold for past and future centuries. Let's check
+every hour for 600 years starting from 1 January 1700.
+
+```{r, warning=FALSE}
+times <- ymd_hms("1700-01-01 00:00:00", tz = "UTC") + hours(1:5.25948e6)
+range(times)
+```
+
+```{r, warning=FALSE}
+meeus.df <- sun_angles(times, use.refraction = TRUE)
+meeus.df
+```
+
+Now we use the 'suncalc' package to compute the same values.
+
+```{r}
+suncalc.df <- getSunlightPosition(date = times, lat = 51.5, lon = 0)
+suncalc.df$elevation <- suncalc.df$altitude * 180 / pi # radians to degrees
+suncalc.df$azimuth <- suncalc.df$azimuth * 180 / pi # radians to degrees
+suncalc.df$azimuth <- suncalc.df$azimuth + 180 # radians to degrees
+head(suncalc.df, n = 3L)
+```
+
+We compute the differences in sun elevations, and their range. Over this
+extended period, the maximum and minimum differences are substantial. We plot a
+smooth spline on the absolute value of the differences, as from the range we
+already know that they maxima and minimum differences are of opposite signs. The
+sun elevation values from the two functions are closest during the first half of
+the 21st century. On the other hand we see that the fitted spline does not reach
+the extreme values by a large margin. What is going on?
+
+```{r, message=FALSE}
+differences <- suncalc.df$elevation - meeus.df$elevation
+differences.range <- range(differences)
+differences.range
+
+ggplot(data.frame(times, differences), aes(times, abs(differences))) +
+  stat_smooth(method = "gam") +
+  stat_panel_counts(label.x = "centre") +
+  labs(x = "Time", y = "Absolute difference in sun elevation (degrees)") +
+  expand_limits(y = 0)
+```
+
+If we plot the 2D density distribution we get a very surprising pattern. So as
+we move into the past we mainly have thre concentrations of differences:
+positive, no difference or negatine, with fewer intermediate values. When we
+move into the future we get four rays of concentrated difference values.
+
+```{r}
+ggplot(data.frame(times, differences), aes(times, differences)) +
+  stat_hdr() +
+  stat_panel_counts(label.x = "centre") +
+  labs(x = "Time", y = "Difference in sun elevation (degrees)")
+```
+
+A difference in sun elevation of 3.5 degrees is too much for many applications.
+So which of the two algorithms is more accurate? Before checking this, let's
+check time related quantities.
+
+### Sunrise and sunset times
+
+Lets check every day for 600 years starting from 1 January 1700.
+
+```{r, warning=FALSE}
+times <- ymd_hms("1700-01-01 00:00:00", tz = "UTC") + days(0:(600 * 365 + 145)) 
+range(times)
+```
+
+
+```{r, warning=FALSE}
+meeus_dn.df <- day_night(times, tz = "UTC", unit.out = "datetime", twilight = "sunlight")
+meeus_dn.df
+```
+
+Now we use the 'suncalc' package to compute the same values.
+
+```{r}
+suncalc_dn.df <- getSunlightTimes(date = as.Date(times, tz = "UTC"), lat = 51.5, lon = 0)
+head(suncalc_dn.df, n = 3L)
+```
+
+We compute the differences in sun elevations, and their range. Over this
+extended period, the maximum and minimum differences are substantial. We plot a
+smooth spline on the absolute value of the differences, as from the range we
+already know that they maxima and minimum differences are of opposite signs. The
+sun elevation values from the two functions are closest during the first half of
+the 21st century. On the other hand we see that the fitted spline does not reach
+the extreme values by a large margin. What is going on?
+
+```{r, message=FALSE}
+noon_differences <- suncalc_dn.df$solarNoon - meeus_dn.df$noon
+range(differences)
+
+ggplot(data.frame(times, noon_differences), aes(times, noon_differences)) +
+  stat_hdr() +
+  stat_panel_counts(label.x = "centre") +
+  labs(x = "Time", y = "Difference in noon time (seconds)")
+```
+
+```{r, message=FALSE}
+sunrise_differences <- suncalc_dn.df$sunrise - meeus_dn.df$sunrise
+range(sunrise_differences)
+
+ggplot(data.frame(times, sunrise_differences), aes(times, sunrise_differences)) +
+  stat_hdr() +
+  stat_panel_counts(label.x = "centre") +
+  labs(x = "Time", y = "Difference in sunrise time (seconds)")
+```
+
+So do these shifts affect the day length estimates?
+
+```{r, message=FALSE}
+
+suncalc_dn.df$daylength <- suncalc_dn.df$sunset - suncalc_dn.df$sunrise
+
+daylength_differences <- suncalc_dn.df$daylength - meeus_dn.df$daylength
+range(daylength_differences)
+
+ggplot(data.frame(times, daylength_differences), aes(times, daylength_differences)) +
+  stat_hdr() +
+  stat_panel_counts(label.x = "centre") +
+  labs(x = "Time", y = "Difference in daylength (h)")
+```
+
+The differences seem to be consistently increasing as we move away from the 
+first third of the 21st century, 2016 or 2000 seem to be the least different
+depending on the value estimated.
+
+## Conclusion
+
+This tests confirm that the computation intensive algorithm from Meeus as
+implemented in package 'SunCalcMeeus' provides much better estimates of sunset
+and sunrise times, and of the position of the sun than package 'suncalc' at the
+expense of slower performance that is in most cases tolerable. The improvement
+in accuracy of using 'SunCalcMeeus' vs. 'suncalc' increases as time are farther
+away from the present. Even if computations take nearly 3 times as long, 
+they are still fast.
+
+Tests for dates further into the past would be needed. Obtaining reference data
+for a comparison requires more effort.
+
+[On-line documentation](https://docs.r4photobiology.info/SunCalcMeeus/).
+[NEWS file](https://docs.r4photobiology.info/SunCalcMeeus/news/).
+

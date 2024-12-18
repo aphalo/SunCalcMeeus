@@ -65,6 +65,8 @@ navbar:
         href: articles/userguide-0-r4p-introduction.html
       - text: '1 Astronomy and Atmosphere'
         href: articles/userguide-1-astronomy.html
+      - text: 'Speed and Accuracy Tests'
+        href: articles/tests.html
     tutorials:
       text: Resources
       menu:

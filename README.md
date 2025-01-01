@@ -5,10 +5,13 @@
 
 [![CRAN
 version](https://www.r-pkg.org/badges/version-last-release/SunCalcMeeus)](https://cran.r-project.org/package=SunCalcMeeus)
+[![cran
+checks](https://badges.cranchecks.info/worst/SunCalcMeeus.svg)](https://cran.r-project.org/web/checks/check_results_SunCalcMeeus.html)
 [![SunCalcMeeus status
 badge](https://aphalo.r-universe.dev/badges/SunCalcMeeus)](https://aphalo.r-universe.dev/SunCalcMeeus)
 [![R-CMD-check](https://github.com/aphalo/SunCalcMeeus/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/aphalo/SunCalcMeeus/actions/workflows/R-CMD-check.yaml)
 [![Documentation](https://img.shields.io/badge/documentation-SunCalcMeeus-informational.svg)](https://docs.r4photobiology.info/SunCalcMeeus/)
+[![doi](https://img.shields.io/badge/doi-10.32614/CRAN.package.SunCalcMeeus-blue.svg)](https://doi.org/10.32614/CRAN.package.SunCalcMeeus)
 <!-- badges: end -->
 
 ## Purpose
@@ -39,6 +42,11 @@ correction for atmospheric refraction must be included in the
 computation of the apparent elevation angle, in the second case this
 correction is applied when computing AM.
 
+Estimation of extraterrestrial irradiance (shortwave incoming radiation
+at the top of the atmosphere) above a geographic location at the Earth
+surface at a given instant in time is implemented in function
+`irrad_extraterrestrial()`.
+
 Class `tod_time` is defined and used to store time-of-day values based
 on time zones. Classes `solar_time` and `solar_date` are defined and
 used to store local solar times and dates, i.e., astronomical time
@@ -57,7 +65,7 @@ range.
 
 The functions provided are vectorised, and the best performance per
 computed value is achieved when long vectors of instants in time are
-passed as arguments, as the equation of time is in this case computed
+passed as arguments, as the equation of time is in this case generated
 only once for each geographic location.
 
 ## History
@@ -91,7 +99,7 @@ geocode <- data.frame(lon = 0, lat = 55)
 date <- lubridate::today(tzone = "UTC")
 
 sunrise_time(date, geocode = geocode)
-#> [1] "2024-12-02 08:03:29 UTC"
+#> [1] "2024-12-31 08:24:57 UTC"
 
 dates <- ymd("2024-09-21") + months(0:11)
 sunrise_time(dates, geocode = geocode)
@@ -192,7 +200,7 @@ publications, please cite according to:
 
 ``` r
 citation("SunCalcMeeus")
-#> To cite package ‘photobiologySunCalc’ in publications use:
+#> To cite package ‘SunCalcMeeus’ in publications use:
 #> 
 #>   Aphalo, Pedro J. (2015) The r4photobiology suite. UV4Plants Bulletin,
 #>   2015:1, 21-29. DOI:10.19232/uv4pb.2015.1.14

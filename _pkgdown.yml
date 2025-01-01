@@ -32,10 +32,11 @@ reference:
     - format.tod_time
     - print.tod_time
 
-  - title: Atmosphere
-    desc: Computation of equivalent air mass at different solar elevations.
+  - title: Quantities dependent on sun position
+    desc: Computation of equivalent air mass and extraterrestrial solar irradiance.
     contents:
     - relative_AM
+    - irrad_extraterrestrial
 
   - title: Utilities
     desc: Various utilities for handling input and output for the functions and methods above.

@@ -99,7 +99,7 @@ geocode <- data.frame(lon = 0, lat = 55)
 date <- lubridate::today(tzone = "UTC")
 
 sunrise_time(date, geocode = geocode)
-#> [1] "2024-12-31 08:24:57 UTC"
+#> [1] "2025-01-08 08:21:29 UTC"
 
 dates <- ymd("2024-09-21") + months(0:11)
 sunrise_time(dates, geocode = geocode)
@@ -221,6 +221,6 @@ citation("SunCalcMeeus")
 
 ## License
 
-© 2012-2024 Pedro J. Aphalo (<pedro.aphalo@helsinki.fi>). Released under
+© 2012-2025 Pedro J. Aphalo (<pedro.aphalo@helsinki.fi>). Released under
 the GPL, version 2 or greater. This software carries no warranty of any
 kind.

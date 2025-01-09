@@ -2,6 +2,58 @@ library("lubridate")
 
 context("sun_times")
 
+test_that("day_night handles dubious argument values", {
+
+  my.geocode <- data.frame(lon = 24.93838,
+                           lat = 60.16986,
+                           address = "Helsinki, Finland")
+
+  expect_is(day_night(ymd("2015-05-30", tz = "Europe/Helsinki"), geocode = my.geocode),
+            "data.frame")
+
+  expect_silent(day_night(ymd("2015-05-30"), geocode = my.geocode, tz = "Europe/Helsinki"))
+  expect_silent(day_night(ymd("2015-05-30", tz = ""), geocode = my.geocode))
+  expect_silent(day_night(ymd("2015-05-30"), geocode = my.geocode, tz = ""))
+  expect_silent(day_night(ymd("2015-05-30"), geocode = my.geocode, tz = c("UTC", "UTC")))
+  expect_warning(day_night(ymd("2015-05-30"), geocode = my.geocode, tz = c("UTC", "")))
+  expect_warning(day_night(ymd("2015-05-30"), geocode = my.geocode, tz = c("UTC", "GMT")))
+  expect_equal(day_night(ymd("2015-05-30", tz = ""), geocode = my.geocode,
+                         unit.out = "minute"),
+               day_night(ymd("2015-05-30", tz = ""), geocode = my.geocode,
+                         unit.out = "minutes"))
+  expect_equal(day_night(ymd("2015-05-30", tz = ""), geocode = my.geocode,
+                         unit.out = "second"),
+               day_night(ymd("2015-05-30", tz = ""), geocode = my.geocode,
+                         unit.out = "seconds"))
+  expect_equal(day_night(ymd("2015-05-30", tz = ""), geocode = my.geocode,
+                         unit.out = "day"),
+               day_night(ymd("2015-05-30", tz = ""), geocode = my.geocode,
+                         unit.out = "days"))
+  expect_equal(day_night(ymd("2015-05-30", tz = ""), geocode = my.geocode,
+                         unit.out = "date"),
+               day_night(ymd("2015-05-30", tz = ""), geocode = my.geocode,
+                         unit.out = "datetime"))
+  geocode.no.address <- geocode.na.address <- my.geocode
+  geocode.no.address[["address"]] <- NULL
+  geocode.na.address[["address"]] <- NA_character_
+  expect_equal(day_night(ymd("2015-05-30", tz = ""), geocode = geocode.na.address,
+                         unit.out = "date"),
+               day_night(ymd("2015-05-30", tz = ""), geocode = geocode.no.address,
+                         unit.out = "datetime"))
+  geocode.lon.off.range <- geocode.lat.off.range <- my.geocode
+  geocode.lon.off.range[["lon"]] <- 181
+  geocode.lat.off.range[["lat"]] <- 91
+  expect_error(day_night(ymd("2015-05-30", tz = ""), geocode = geocode.lon.off.range))
+  expect_error(day_night(ymd("2015-05-30", tz = ""), geocode = geocode.lat.off.range))
+  expect_error(day_night(ymd("2015-05-30", tz = ""), geocode = my.geocode, unit.out = "bad"))
+})
+
+test_that("is_daytime() handles dubious argument values", {
+  expect_warning(is_daytime(date = 1))
+  expect_true(is.na(suppressWarnings(is_daytime(date = 1))))
+  expect_equal(length(suppressWarnings(is_daytime(date = 1:5))), 5)
+})
+
 test_that("sunrise_time", {
 
   expect_equal(
@@ -30,14 +82,14 @@ test_that("sunrise_time", {
                     twilight = "none")), "UTC"
   )
   expect_equal(
-    tz(sunrise_time(ymd_hms("2016-04-17 12:00:20", tz = "UTC"), tz = "EET",
+    tz(sunrise_time(ymd_hms("2016-04-17 12:00:20", tz = "UTC"), tz = "Europe/Helsinki",
                     geocode = data.frame(lon = 24.93838, lat = 60.16986,
                                          address = "Helsinki, Finland"),
-                    twilight = "none")), "EET"
+                    twilight = "none")), "Europe/Helsinki"
   )
   expect_equal(
     as.duration(
-      sunrise_time(ymd("2016-04-17", tz = "UTC"), tz = "EET",
+      sunrise_time(ymd("2016-04-17", tz = "UTC"), tz = "Europe/Helsinki",
                    geocode = data.frame(lon = 24.93838, lat = 60.16986,
                                         address = "Helsinki, Finland"),
                    twilight = "none") %--%
@@ -121,14 +173,14 @@ test_that("noon_time", {
                     twilight = "none")), "UTC"
   )
   expect_equal(
-    tz(noon_time(ymd_hms("2016-04-17 12:00:20", tz = "UTC"), tz = "EET",
+    tz(noon_time(ymd_hms("2016-04-17 12:00:20", tz = "UTC"), tz = "Europe/Helsinki",
                     geocode = data.frame(lon = 24.93838, lat = 60.16986,
                                          address = "Helsinki, Finland"),
-                    twilight = "none")), "EET"
+                    twilight = "none")), "Europe/Helsinki"
   )
   expect_equal(
     as.duration(
-      noon_time(ymd("2016-04-17", tz = "UTC"), tz = "EET",
+      noon_time(ymd("2016-04-17", tz = "UTC"), tz = "Europe/Helsinki",
                    geocode = data.frame(lon = 24.93838, lat = 60.16986,
                                         address = "Helsinki, Finland"),
                    twilight = "none") %--%
@@ -206,14 +258,14 @@ test_that("sunset_time", {
                     twilight = "none")), "UTC"
   )
   expect_equal(
-    tz(sunset_time(ymd_hms("2016-04-17 12:00:20", tz = "UTC"), tz = "EET",
+    tz(sunset_time(ymd_hms("2016-04-17 12:00:20", tz = "UTC"), tz = "Europe/Helsinki",
                     geocode = data.frame(lon = 24.93838, lat = 60.16986,
                                          address = "Helsinki, Finland"),
-                    twilight = "none")), "EET"
+                    twilight = "none")), "Europe/Helsinki"
   )
   expect_equal(
     as.duration(
-      sunset_time(ymd("2016-04-17", tz = "UTC"), tz = "EET",
+      sunset_time(ymd("2016-04-17", tz = "UTC"), tz = "Europe/Helsinki",
                    geocode = data.frame(lon = 24.93838, lat = 60.16986,
                                         address = "Helsinki, Finland"),
                    twilight = "none") %--%

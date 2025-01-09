@@ -35,13 +35,18 @@ irrad_extraterrestrial <-
            geocode = data.frame(lon = 0, lat = 51.5, address = "Greenwich"),
            solar.constant = "NASA") {
     solar.cnst.map <- c(NASA = 1360, WMO = 1367) # W / m2
+    error.text <- paste("; use one of \"",
+                        paste(names(solar.cnst.map), collapse = "\", \""),
+                        "\", or a positive number.", sep = "")
     if (is.character(solar.constant)) {
       if (solar.constant %in% names(solar.cnst.map)) {
         solar.constant <- solar.cnst.map[solar.constant]
       } else {
-        stop("Named solar constant '", solar.constant,
-             "' not known; Use one of: ", names(solar.cnst.map))
+        stop("Named solar constant \"", solar.constant,
+             "\" not known", error.text)
       }
+    } else if (!is.numeric(solar.constant) || any(solar.constant <= 0)) {
+      stop("Invalid solar constant \"", solar.constant, "\"", error.text)
     }
     angles <- SunCalcMeeus::sun_angles(time = time,
                                        tz = tz,

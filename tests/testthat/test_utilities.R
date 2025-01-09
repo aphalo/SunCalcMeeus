@@ -39,64 +39,64 @@ test_that("solar time works correctly for dates and datetimes", {
 
   expect_equal(solar_time(ymd_hms("2012-12-22 12:00:00", tz = "UTC"),
                           geocode = data.frame(lon = 0, lat = c(-41, -3, 3, 41)),
-                          unit = "days"),
+                          unit.out = "days"),
                rep(12.01999 / 24, times = 4),
                tolerance = 1e-5)
   expect_equal(solar_time(ymd_hms("2012-12-22 12:00:00", tz = "UTC"),
                           geocode = data.frame(lon = 0, lat = c(-41, -3, 3, 41)),
-                          unit = "hours"),
+                          unit.out = "hours"),
                rep(12.01999, times = 4),
                tolerance = 1e-5)
   expect_equal(solar_time(ymd_hms("2012-12-22 12:00:00", tz = "UTC"),
                           geocode = data.frame(lon = 0, lat = c(-41, -3, 3, 41)),
-                          unit = "minutes"),
+                          unit.out = "minutes"),
                rep(12.01999 * 60, times = 4),
                tolerance = 1e-5)
   expect_equal(solar_time(ymd_hms("2012-12-22 12:00:00", tz = "UTC"),
                           geocode = data.frame(lon = 0, lat = c(-41, -3, 3, 41)),
-                          unit = "seconds"),
+                          unit.out = "seconds"),
                rep(12.01999 * 60 * 60, times = 4),
                tolerance = 1e-5)
   expect_equal(solar_time(ymd_hms("2012-12-22 12:00:00", tz = "UTC"),
                           geocode = data.frame(lon = c(30, 15, 0, -15, -30), lat = 60),
-                          unit = "hours"),
+                          unit.out = "hours"),
                10.01999 + 4:0,
                tolerance = 1e-5)
   expect_true(is.solar_time(solar_time(ymd_hms("2012-12-22 12:00:00", tz = "UTC"),
                                        geocode = data.frame(lon = c(30, 15, 0, -15, -30), lat = 60),
-                                       unit = "time")))
+                                       unit.out = "time")))
   expect_true(is.solar_date(solar_time(ymd_hms("2012-12-22 12:00:00", tz = "UTC"),
                                        geocode = data.frame(lon = c(30, 15, 0, -15, -30), lat = 60),
-                                       unit = "datetime")))
+                                       unit.out = "datetime")))
   expect_true(is.solar_date(solar_time(ymd_hms("2012-12-22 12:00:00", tz = "UTC"),
                                        geocode = data.frame(lon = c(30, 15, 0, -15, -30), lat = 60),
-                                       unit = "date")))
+                                       unit.out = "date")))
 
 
   expect_equal(capture.output(print(solar_time(ymd_hms("2012-12-22 12:00:00", tz = "UTC"),
                                                geocode = data.frame(lon = 0, lat = 60),
-                                               unit = "time"))),
+                                               unit.out = "time"))),
                "[1] \"12:01:11\"")
   expect_equal(capture.output(print(solar_time(ymd_hms("2012-12-22 12:00:00", tz = "UTC"),
                                                geocode = data.frame(lon = 0, lat = 60),
-                                               unit = "datetime"))),
+                                               unit.out = "datetime"))),
                "[1] \"2012-12-22 12:01:11 solar\"")
   expect_equal(capture.output(print(solar_time(ymd_hms("2012-12-22 12:00:00", tz = "UTC"),
                                                geocode = data.frame(lon = 0, lat = 60),
-                                               unit = "date"))),
+                                               unit.out = "date"))),
                "[1] \"2012-12-22 12:01:11 solar\"")
 
   expect_equal(capture.output(format(solar_time(ymd_hms("2012-12-22 12:00:00", tz = "UTC"),
                                                geocode = data.frame(lon = 0, lat = 60),
-                                               unit = "time"))),
+                                               unit.out = "time"))),
                "[1] \"12:01:11\"")
   expect_equal(capture.output(format(solar_time(ymd_hms("2012-12-22 12:00:00", tz = "UTC"),
                                                 geocode = data.frame(lon = 0, lat = 60),
-                                                unit = "datetime"))),
+                                                unit.out = "datetime"))),
                "[1] \"2012-12-22 12:01:11\"")
   expect_equal(capture.output(format(solar_time(ymd_hms("2012-12-22 12:00:00", tz = "UTC"),
                                                 geocode = data.frame(lon = 0, lat = 60),
-                                                unit = "date"))),
+                                                unit.out = "date"))),
                "[1] \"2012-12-22 12:01:11\"")
 
 }
@@ -114,11 +114,30 @@ test_that("geocode validation works correctly for dates and datetimes", {
   expect_no_error(validate_geocode(data.frame(lon = 0, lat = 89.99)))
   expect_no_error(validate_geocode(data.frame(lon = 0, lat = -89.99)))
 
+  # validate_geocode() converts non-character addresses into character
+  expect_no_error(validate_geocode(data.frame(lon = 180, lat = 60, address = "my address 1")))
+  expect_no_error(validate_geocode(data.frame(lon = 180, lat = 60, address =  factor("my address 1"))))
+  expect_equal(validate_geocode(data.frame(lon = 180, lat = 60, address = "my address 1")),
+               validate_geocode(data.frame(lon = 180, lat = 60, address =  factor("my address 1"))))
+
   expect_no_error(validate_geocode(NA))
   expect_equal(validate_geocode(NA), na_geocode())
   expect_true(is_valid_geocode(na_geocode()))
+  expect_true(is_valid_geocode(data.frame(lon = 10, lat = 60, address = "my address 1")))
+  expect_warning(is_valid_geocode(data.frame(lon = 10, lat = 60, address = factor("my address 1"))))
+  expect_false(suppressWarnings(
+    is_valid_geocode(data.frame(lon = 10, lat = 60, address = factor("my address 1")))
+    ))
   expect_false(is_valid_geocode(NA))
   expect_false(is_valid_geocode(data.frame(lon = 700, lat = 60)))
+  expect_false(is_valid_geocode(data.frame(lon = 700, lat = 60, address = "my address 1")))
+
+  two.geocodes <- list(data.frame(lon = 10, lat = 60, address = "my address 1"),
+                       data.frame(lon = 30, lat = 20, address = "my address 2"))
+  expect_true(is_valid_geocode(two.geocodes))
+  two.geocodes <- list(data.frame(lon = 10, lat = 60, address = "my address 1"),
+                       data.frame(lon = -300, lat = 20, address = "my address 2"))
+  expect_false(is_valid_geocode(two.geocodes))
 
   expect_equal(length_geocode(data.frame(lon = 0, lat = 60)), 1L)
   expect_equal(length_geocode(data.frame(lon = 0:4 * 10, lat = rep(60, 5))), 5L)

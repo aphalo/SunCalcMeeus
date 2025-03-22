@@ -4,6 +4,10 @@ editor_options:
     wrap: 72
 ---
 
+# SunCalcMeeus 0.1.3
+
+- Fix to docs (contributed as #1 by srearl).
+
 # SunCalcMeeus 0.1.2
 
 - Add function `irrad_extraterrestrial()` implementing estimation of the

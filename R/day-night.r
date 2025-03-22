@@ -30,7 +30,7 @@
 #'   = -0.53 / 2. "refraction": solar elevation = 0 degrees + refraction
 #'   correction. "sunlight": upper rim of solar disk corrected for refraction,
 #'   which is close to the value used by the online NOAA Solar Calculator.
-#'   "civil": -6 degrees, "naval": -12 degrees, and "astronomical": -18 degrees.
+#'   "civil": -6 degrees, "nautical": -12 degrees, and "astronomical": -18 degrees.
 #'   Unit names for output are as follows: "day", "hours", "minutes" and
 #'   "seconds" times for sunrise and sunset are returned as times-of-day since
 #'   midnight expressed in the chosen unit. "date" or "datetime" return the same

@@ -29,15 +29,27 @@
 #' @export
 #'
 validate_geocode <- function(geocode) {
+  # if (is.list(geocode) && !is.data.frame(geocode)) {
+  #   return(lapply(geocode, validate_geocode))
+  # }
   if (is.atomic(geocode) && (length(geocode) == 1L) && is.na(geocode)) {
     geocode <- na_geocode()
   } else if (is.data.frame(geocode)) {
     geocode <- tibble::as_tibble(geocode, .name_repair = "minimal")
   } else {
-    stop("Bad geocode: ", paste(format(geocode), collapse = ", ", sep = ""))
+    stop("Bad 'geocode': ", paste(format(geocode), collapse = ", ", sep = ""))
   }
-  stopifnot(nrow(geocode) >= 1) # needs to be replace by generation of no output in all functions
-  stopifnot(exists("lon", geocode), exists("lat", geocode))
+  if (length(geocode) < 1L || nrow(geocode) < 1L) {
+    if (is.data.frame(geocode)) {
+      stop("'geocode' data frame has no rows")
+    } else {
+      stop("'geocode' is missing")
+    }
+  }
+  if (!all(c("lon", "lat") %in% names(geocode))) {
+    stop("Bad geocode names: ",
+         paste(names(geocode), collapse = ", ", sep = ""))
+  }
   geocode[["lon"]] <- as.numeric(geocode[["lon"]]) # convert logical NA
   geocode[["lat"]] <- as.numeric(geocode[["lat"]]) # convert logical NA
   if (any(stats::na.omit(geocode[["lon"]]) > 180 | stats::na.omit(geocode[["lon"]]) < -180)) {

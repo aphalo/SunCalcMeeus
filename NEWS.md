@@ -7,6 +7,9 @@ editor_options:
 # SunCalcMeeus 0.1.3
 
 - Fix to docs (contributed as #1 by srearl).
+- Add functions `split_geocodes()` and `bind_geocodes()` for conversion
+between named lists of one-row data frames and data frames with multiple
+rows.
 
 # SunCalcMeeus 0.1.2
 

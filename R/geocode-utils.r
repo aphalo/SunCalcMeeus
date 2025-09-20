@@ -119,3 +119,93 @@ na_geocode <- function() {
                  address = NA_character_)
 }
 
+#' Split or bind geocodes
+#'
+#' Multiple geocodes can be stored as rows in a single data frame or as a
+#' named list of one row data frames. As metadata attributes lists are easier
+#' to manipulate, but when computing the sun position data frames are more
+#' efficient. These functions implement conversions between objects using
+#' these two approaches.
+#'
+#' @param geocode data.frame with geocode data in columns \code{"lat"},
+#'   \code{"lon"}, and possibly also \code{"address"}.
+#' @param idFactor character Name of the column where the ID factor is stored
+#'   in geocode data frames with multiple rows.
+#' @param simplify logical Flag indicating if when the list to be returnes
+#'   has a single member, the member geocode should be returned instead.
+#'
+#' @details Function \code{split_geocodes()} splits a multi-row data.frame
+#'   containing one geocode per row and a \code{character} vector or a
+#'   \code{factor} as ID column into a named list of one row data
+#'   frames containing the same geocode information. If the input is a
+#'   single-row data frame or a list with a single member, and
+#'   \code{simplify = TRUE} is passed in the call, a bare data frame is
+#'   returned, with the ID column, if present, deleted.
+#'
+#'   Function \code{bind_geocodes()} binds the geocodes members of a
+#'   list into a multirow data.frame containing one geocode per row and
+#'   a \code{character} vector ID column containing the same geocode
+#'   information.
+#'
+#' @return A list of geo_code data frames or a single geocode data frame.
+#'
+#' @examples
+#' my.geocodes <- data.frame(lon = c(0, 10, 15),
+#'                           lat = c(30, 60, 89),
+#'                           address = c("one", "two", "three"),
+#'                           spct.idx = c("A", "B", "C"))
+#'
+#' split_geocodes(my.geocodes)
+#' split_geocodes(my.geocodes[1, ])
+#'
+#' my.list <- list("A" = data.frame(lon = 10,
+#'                                  lat = 30,
+#'                                  address = "North"),
+#'                 "B" = data.frame(lon = -10,
+#'                                  lat = -30,
+#'                                  address = "South"))
+#'
+#' bind_geocodes(my.list)
+#'
+#' @export
+#'
+split_geocodes <- function(geocode,
+                           idFactor = "spct.idx",
+                           simplify = TRUE) {
+  if (is.data.frame(geocode)) {
+    stopifnot(is_valid_geocode(geocode))
+    if (idFactor %in% colnames(geocode)) {
+      IDs <- as.character(geocode[[idFactor]])
+    } else {
+      stop("idFactor '", idFactor, "' not a column in 'geocode'")
+    }
+    temp.df <- geocode[ , -which(colnames(geocode) == idFactor)]
+    geocode <- list()
+    for (i in seq_along(IDs)) {
+      geocode[[IDs[i]]] <- validate_geocode(temp.df[i, ])
+    }
+  }
+  if (simplify &&
+      is.list(geocode) &&
+      (!is.data.frame(geocode)) &&
+      length(geocode) == 1L) {
+    geocode <- geocode[[1]]
+  }
+  geocode
+}
+
+#' @rdname split_geocodes
+#'
+#' @export
+#'
+bind_geocodes <- function(geocode,
+                          idFactor = "spct.idx") {
+  if (is.list(geocode) && !is.data.frame(geocode)) {
+    if (length(unique(names(geocode))) != length(geocode)) {
+      warning("Names of list members are missing or are not unique!")
+    }
+    geocode <- dplyr::bind_rows(geocode, .id = idFactor)
+#    class(z) <- class(geocode[[1L]])
+  }
+  validate_geocode(geocode)
+}

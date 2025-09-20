@@ -147,3 +147,103 @@ test_that("geocode validation works correctly for dates and datetimes", {
 }
 )
 
+test_that("split/bind for geocodes with address works correctly", {
+
+  my.geocodes <-
+    data.frame(spct.idx = c("A", "B", "C"),
+               lon = c(0, 10, 15),
+               lat = c(30, 60, 89),
+               address = c("one", "two", "three")) |>
+    validate_geocode()
+
+  expect_silent(geo.list <- split_geocodes(my.geocodes))
+  expect_named(geo.list, my.geocodes[["spct.idx"]])
+  expect_true(length(geo.list) == nrow(my.geocodes))
+  expect_equal(bind_geocodes(geo.list), my.geocodes)
+  expect_error(split_geocodes(data.frame()))
+  expect_error(bind_geocodes(list()))
+  # silent pass-through
+  expect_silent(split_geocodes(geo.list))
+  expect_equal(split_geocodes(geo.list), geo.list)
+  expect_silent(bind_geocodes(my.geocodes))
+  expect_equal(bind_geocodes(my.geocodes), my.geocodes)
+  # simplify
+  expect_is(split_geocodes(my.geocodes[1, ]), "data.frame")
+  expect_is(split_geocodes(my.geocodes[1, ],
+                           simplify = TRUE), "data.frame")
+  expect_is(split_geocodes(my.geocodes[1, ],
+                           simplify = FALSE), "list")
+}
+)
+
+test_that("split/bind for geocodes without address works correctly", {
+
+  my.geocodes <-
+    data.frame(spct.idx = c("A", "B", "C"),
+               lon = c(0, 10, 15),
+               lat = c(30, 60, 89)) |>
+    validate_geocode()
+
+  expect_silent(geo.list <- split_geocodes(my.geocodes))
+  expect_named(geo.list, my.geocodes[["spct.idx"]])
+  expect_true(length(geo.list) == nrow(my.geocodes))
+  expect_equal(bind_geocodes(geo.list), my.geocodes)
+  expect_error(split_geocodes(data.frame()))
+  expect_error(bind_geocodes(list()))
+  # silent pass-through
+  expect_silent(split_geocodes(geo.list))
+  expect_equal(split_geocodes(geo.list), geo.list)
+  expect_silent(bind_geocodes(my.geocodes))
+  expect_equal(bind_geocodes(my.geocodes), my.geocodes)
+}
+)
+
+test_that("split/bind for geocodes with idFactor works correctly", {
+
+  my.geocodes <-
+    data.frame(ID = c("A", "B", "C"),
+               lon = c(0, 10, 15),
+               lat = c(30, 60, 89),
+               address = c("one", "two", "three")) |>
+    validate_geocode()
+
+  expect_error(split_geocodes(my.geocodes))
+  expect_silent(geo.list <- split_geocodes(my.geocodes,
+                                           idFactor = "ID"))
+  expect_named(geo.list, my.geocodes[["ID"]])
+  expect_true(length(geo.list) == nrow(my.geocodes))
+  expect_equal(bind_geocodes(geo.list, idFactor = "ID"),
+               my.geocodes)
+  expect_error(split_geocodes(data.frame()))
+  expect_error(bind_geocodes(list()))
+  # silent pass-through
+  expect_silent(split_geocodes(geo.list))
+  expect_equal(split_geocodes(geo.list), geo.list)
+  expect_silent(bind_geocodes(my.geocodes))
+  expect_equal(bind_geocodes(my.geocodes), my.geocodes)
+}
+)
+
+test_that("split/bind for geocodes with extra column works correctly", {
+
+  my.geocodes <-
+    data.frame(spct.idx = c("A", "B", "C"),
+               lon = c(0, 10, 15),
+               lat = c(30, 60, 89),
+               z = c("one", "two", "three")) |>
+    validate_geocode()
+
+  expect_silent(geo.list <- split_geocodes(my.geocodes))
+  expect_named(geo.list, my.geocodes[["spct.idx"]])
+  expect_true(length(geo.list) == nrow(my.geocodes))
+  expect_equal(bind_geocodes(geo.list), my.geocodes)
+  expect_error(split_geocodes(data.frame()))
+  expect_error(bind_geocodes(list()))
+  # silent pass-through
+  expect_silent(split_geocodes(geo.list))
+  expect_equal(split_geocodes(geo.list), geo.list)
+  expect_silent(bind_geocodes(my.geocodes))
+  expect_equal(bind_geocodes(my.geocodes), my.geocodes)
+}
+)
+

@@ -205,6 +205,7 @@ bind_geocodes <- function(geocode,
       warning("Names of list members are missing or are not unique!")
     }
     geocode <- dplyr::bind_rows(geocode, .id = idx)
+
 #    class(z) <- class(geocode[[1L]])
   }
   validate_geocode(geocode)

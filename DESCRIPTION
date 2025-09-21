@@ -14,16 +14,16 @@ Description: Compute the position of the sun, and local solar time using Meeus'
     <doi:10.19232/uv4pb.2015.1.14>. Algorithms from Meeus (1998, ISBN:0943396611).
 License: GPL (>= 2)
 Depends:
-    R (>= 4.0.0)
+    R (>= 4.1.0)
 Imports:
     stats,
-    tibble (>= 3.1.6),
-    lubridate (>= 1.9.3),
-    dplyr (>= 1.0.9)
+    tibble (>= 3.3.0),
+    lubridate (>= 1.9.4),
+    dplyr (>= 1.1.4)
 Suggests:
-    knitr (>= 1.41),
-    rmarkdown (>= 2.18),
-    testthat (>= 3.2.1),
+    knitr (>= 1.50),
+    rmarkdown (>= 2.29),
+    testthat (>= 3.2.3),
     roxygen2 (>= 7.3.0),
     lutz (>= 0.3.2),
     covr,

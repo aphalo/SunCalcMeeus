@@ -209,10 +209,10 @@ test_that("split/bind for geocodes with idFactor works correctly", {
 
   expect_error(split_geocodes(my.geocodes))
   expect_silent(geo.list <- split_geocodes(my.geocodes,
-                                           idFactor = "ID"))
+                                           idx = "ID"))
   expect_named(geo.list, my.geocodes[["ID"]])
   expect_true(length(geo.list) == nrow(my.geocodes))
-  expect_equal(bind_geocodes(geo.list, idFactor = "ID"),
+  expect_equal(bind_geocodes(geo.list, idx = "ID"),
                my.geocodes)
   expect_error(split_geocodes(data.frame()))
   expect_error(bind_geocodes(list()))
@@ -246,4 +246,3 @@ test_that("split/bind for geocodes with extra column works correctly", {
   expect_equal(bind_geocodes(my.geocodes), my.geocodes)
 }
 )
-

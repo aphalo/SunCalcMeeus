@@ -5,15 +5,15 @@
 \alias{bind_geocodes}
 \title{Split or bind geocodes}
 \usage{
-split_geocodes(geocode, idFactor = "spct.idx", simplify = TRUE)
+split_geocodes(geocode, idx = "spct.idx", simplify = TRUE)
 
-bind_geocodes(geocode, idFactor = "spct.idx")
+bind_geocodes(geocode, idx = "spct.idx")
 }
 \arguments{
 \item{geocode}{data.frame with geocode data in columns \code{"lat"},
 \code{"lon"}, and possibly also \code{"address"}.}
 
-\item{idFactor}{character Name of the column where the ID factor is stored
+\item{idx}{character Name of the column where the ID factor is stored
 in geocode data frames with multiple rows.}
 
 \item{simplify}{logical Flag indicating if when the list to be returnes

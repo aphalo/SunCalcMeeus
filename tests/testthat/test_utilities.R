@@ -198,7 +198,7 @@ test_that("split/bind for geocodes without address works correctly", {
 }
 )
 
-test_that("split/bind for geocodes with idFactor works correctly", {
+test_that("split/bind for geocodes with idx factor works correctly", {
 
   my.geocodes <-
     data.frame(ID = c("A", "B", "C"),

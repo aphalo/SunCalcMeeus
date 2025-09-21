@@ -177,7 +177,7 @@ split_geocodes <- function(geocode,
     if (idx %in% colnames(geocode)) {
       IDs <- as.character(geocode[[idx]])
     } else {
-      stop("idFactor '", idx, "' not a column in 'geocode'")
+      stop("idx '", idx, "' not a column in 'geocode'")
     }
     temp.df <- geocode[ , -which(colnames(geocode) == idx)]
     geocode <- list()
